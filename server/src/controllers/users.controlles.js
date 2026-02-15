@@ -26,7 +26,7 @@ export const createUser = async (req, res) => {
 
     const { rows } = await pool.query(query, [data.name, data.email]);
 
-    res.json(rows);
+    res.status(201).json(rows);
   } catch (error) {
     console.error(error);
     if (error?.code === '23505')

@@ -9,5 +9,5 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(userRoutes);
 
-app.listen(PORT || 3000);
+app.listen(PORT);
 console.log('Server on port', PORT);
