@@ -8,14 +8,14 @@ import {
   updateUser,
 } from '../controllers/users.controlles.js';
 
-router.get('/users', getUsers);
+router.get('/', getUsers);
 
-router.get('/users/:id', getUser);
+router.get('/:id', getUser);
 
-router.post('/users', createUser);
+router.post('/', createUser);
 
-router.put('/users/:id', updateUser);
+router.put('/:id', updateUser);
 
-router.delete('/users/:id', deleteUser);
+router.delete('/:id', deleteUser);
 
 export default router;
