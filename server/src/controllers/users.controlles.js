@@ -19,7 +19,7 @@ export const createUser = async (req, res) => {
   try {
     const data = req.body;
 
-    if (data.name === undefined || data.email === undefined)
+    if (!data.name || !data.email)
       return res.status(404).json({ msg: 'Bad request. Data is missing' });
 
     const query = 'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *';
@@ -40,7 +40,7 @@ export const updateUser = async (req, res) => {
     const { id } = req.params;
     const data = req.body;
 
-    if (data.name === undefined || data.email === undefined)
+    if (!data.name || !data.email)
       return res
         .status(404)
         .json({ msg: 'Bad request, name and email required' });

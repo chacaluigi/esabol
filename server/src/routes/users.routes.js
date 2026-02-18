@@ -9,13 +9,8 @@ import {
 } from '../controllers/users.controlles.js';
 
 router.get('/', getUsers);
-
-router.get('/:id', getUser);
-
 router.post('/', createUser);
 
-router.put('/:id', updateUser);
-
-router.delete('/:id', deleteUser);
+router.route('/:id').get(getUser).put(updateUser).delete(deleteUser);
 
 export default router;
