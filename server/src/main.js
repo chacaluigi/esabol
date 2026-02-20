@@ -4,8 +4,7 @@ import { sequelize } from './config/db.js';
 
 async function main() {
   try {
-    await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
+    await sequelize.sync({ force: true });
     app.listen(PORT);
     console.log('Server on port', PORT);
   } catch (error) {
