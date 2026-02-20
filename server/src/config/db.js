@@ -1,16 +1,13 @@
-import pg from 'pg';
-import {
-  DB_DATABASE,
-  DB_HOST,
-  DB_PASSWORD,
-  DB_PORT,
-  DB_USER,
-} from './config.js';
+import { Sequelize } from 'sequelize';
 
-export const pool = new pg.Pool({
-  user: DB_USER,
+import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_USER } from './config.js';
+
+export const sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
-  password: DB_PASSWORD,
-  database: DB_DATABASE,
-  port: DB_PORT,
+  dialect: 'postgres',
+  define: {
+    underscored: true,
+    freezeTableName: false,
+    timestamps: true,
+  },
 });
