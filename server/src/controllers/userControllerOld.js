@@ -1,10 +1,3 @@
-//import { pool } from '../config/db.js';
-
-export const getUsers = async (req, res) => {
-  const { rows } = await pool.query('SELECT * FROM users');
-  res.json(rows);
-};
-
 export const getUser = async (req, res) => {
   const { id } = req.params;
   const query = 'SELECT * FROM users WHERE user_id = $1';
