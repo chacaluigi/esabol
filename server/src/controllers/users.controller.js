@@ -67,7 +67,7 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.destroy({ where: { userId: id } });
+    const user = await User.destroy({ where: { id } });
 
     if (user === 0)
       return res.status(404).json({ msg: 'User does not exists.' });
