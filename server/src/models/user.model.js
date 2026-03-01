@@ -16,4 +16,18 @@ export const User = sequelize.define('User', {
     allowNull: false,
     unique: true,
   },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  active: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
+  },
+  roleId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
