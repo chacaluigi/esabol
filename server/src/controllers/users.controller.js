@@ -1,6 +1,6 @@
 import { User } from '../models/index.js';
 
-export const getUsers = async (req, res) => {
+export const getUsers = async (req, res, next) => {
   try {
     const users = await User.findAll();
     if (users.length === 0)
@@ -11,7 +11,7 @@ export const getUsers = async (req, res) => {
   }
 };
 
-export const getUser = async (req, res) => {
+export const getUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const user = await User.findByPk(id);
@@ -32,7 +32,7 @@ export const createUser = async (req, res, next) => {
   }
 };
 
-export const updateUser = async (req, res) => {
+export const updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = req.body;
@@ -49,7 +49,7 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const user = await User.destroy({ where: { id } });

@@ -7,7 +7,7 @@ const Role = sequelize.define('Role', {
     primaryKey: true,
     autoIncrement: true,
   },
-  name: DataTypes.STRING,
+  name: { type: DataTypes.STRING, allowNull: false },
 });
 
 export default Role;
