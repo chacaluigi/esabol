@@ -1,11 +1,13 @@
-import { Role } from './role.model.js';
-import { User } from './user.model.js';
-import { Task } from './task.model.js';
-import { Team } from './team.model.js';
-import { TeamMember } from './teamMember.model.js';
-import { DailyReport } from './dailyReport.model.js';
-import { Subtask } from './subtask.model.js';
-import { WorkdayType } from './workdayType.model.js';
+import { sequelize } from '../config/database.js';
+
+import Role from './role.model.js';
+import User from './user.model.js';
+import Task from './task.model.js';
+import Team from './team.model.js';
+import TeamMember from './teamMember.model.js';
+import DailyReport from './dailyReport.model.js';
+import Subtask from './subtask.model.js';
+import WorkdayType from './workdayType.model.js';
 
 Role.hasMany(User, { foreignKey: 'roleId' });
 User.belongsTo(Role, { foreignKey: 'roleId' });
@@ -43,3 +45,15 @@ Task.belongsTo(Team, { foreignKey: 'assigneeTeamId' });
 
 Team.hasMany(TeamMember, { foreignKey: 'teamId' });
 TeamMember.belongsTo(Team, { foreignKey: 'teamId' });
+
+export {
+  sequelize,
+  Role,
+  User,
+  Task,
+  Team,
+  TeamMember,
+  DailyReport,
+  Subtask,
+  WorkdayType,
+};

@@ -1,7 +1,7 @@
 import { sequelize } from '../config/database.js';
 import { DataTypes } from 'sequelize';
 
-export const WorkdayType = sequelize.define('WorkdayType', {
+const WorkdayType = sequelize.define('WorkdayType', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -12,3 +12,5 @@ export const WorkdayType = sequelize.define('WorkdayType', {
     allowNull: false,
   },
 });
+
+export default WorkdayType;

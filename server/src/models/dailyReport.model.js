@@ -1,7 +1,7 @@
 import { sequelize } from '../config/database.js';
 import { DataTypes } from 'sequelize';
 
-export const DailyReport = sequelize.define('DailyReport', {
+const DailyReport = sequelize.define('DailyReport', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -37,3 +37,5 @@ export const DailyReport = sequelize.define('DailyReport', {
     type: DataTypes.TEXT,
   },
 });
+
+export default DailyReport;

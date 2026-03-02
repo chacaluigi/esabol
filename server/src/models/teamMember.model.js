@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database';
+import { sequelize } from '../config/database.js';
 
-export const TeamMember = sequelize.define(
+const TeamMember = sequelize.define(
   'TeamMember',
   {
     teamId: {
@@ -15,3 +15,5 @@ export const TeamMember = sequelize.define(
   },
   { createdAt: 'joinedAt', updatedAt: false },
 );
+
+export default TeamMember;

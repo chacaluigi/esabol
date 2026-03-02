@@ -1,7 +1,7 @@
 import { sequelize } from '../config/database.js';
 import { DataTypes } from 'sequelize';
 
-export const Subtask = sequelize.define('Subtask', {
+const Subtask = sequelize.define('Subtask', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -21,3 +21,5 @@ export const Subtask = sequelize.define('Subtask', {
     allowNull: false,
   },
 });
+
+export default Subtask;

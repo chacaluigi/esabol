@@ -1,9 +1,12 @@
 import app from './app.js';
 import { PORT } from './config/config.js';
-import { sequelize } from './config/database.js';
+import { sequelize } from './models/index.js';
 
 async function main() {
   try {
+    await sequelize.authenticate();
+    console.log('Successfully Database connection...');
+
     await sequelize.sync();
 
     //revisa estado actual de la tabla y añade columnas que faltan sin borrar los datos
@@ -12,7 +15,7 @@ async function main() {
     //borra todas las tablas y las vuelve a crear
     //sequelize.sync({ force: true });
     app.listen(PORT);
-    console.log('Server on port', PORT);
+    console.log('Server running on port', PORT);
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }

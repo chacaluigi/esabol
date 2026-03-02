@@ -1,5 +1,5 @@
 import { DatabaseError } from 'sequelize';
-import { User } from '../models/user.model.js';
+import { User } from '../models/index.js';
 
 export const getUsers = async (req, res) => {
   try {
@@ -13,7 +13,6 @@ export const getUsers = async (req, res) => {
       console.error('There is a problem in the DB structure: ', error.message);
       return res.status(500).json({ error: 'Intern error in database config' });
     }
-
     res.status(500).json({ msg: 'Internal server error' });
   }
 };
@@ -36,17 +35,24 @@ export const createUser = async (req, res) => {
     const user = await User.create(req.body);
     res.status(201).json(user);
   } catch (error) {
-    console.error(error);
-    // errores de validacion
+    // manejo de errores de validacion, en caso que falten datos
     if (error.name === 'SequelizeValidationError') {
       const messages = error.errors.map((e) => e.message);
       return res.status(400).json({ errors: messages });
     }
-    //errores de duplicidad, osea unique
+
+    // manejo de errores de duplicidad, osea unique
     if (error.name === 'SequelizeUniqueConstraintError') {
       const path = error.errors[0].path;
       return res.status(409).json({ msg: `The ${path} is already registered` });
     }
+
+    // manejo de erroren caso que la FK no exista
+    if (error.name === 'SequelizeForeignKeyConstraintError') {
+      return res.status(400).json({ msg: 'The specified role does not exist' });
+    }
+
+    console.error(error);
     res.status(500).json({ msg: 'Internal server error' });
   }
 };
@@ -64,10 +70,18 @@ export const updateUser = async (req, res) => {
 
     res.json(user);
   } catch (error) {
-    console.error(error);
-    if (error.name === 'SequelizeUniqueConstraintError')
-      return res.status(409).json({ msg: 'Email already exists' });
+    // manejo de error de duplicidad
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      const path = error.errors[0].path;
+      return res.status(409).json({ msg: `The ${path} is already registered` });
+    }
 
+    // en case que la FK no exista
+    if (error.name === 'SequelizeForeignKeyConstraintError') {
+      return res.status(400).json({ msg: 'The specified role does not exist' });
+    }
+
+    console.error(error);
     res.status(500).json({ msg: 'Internal server error' });
   }
 };
