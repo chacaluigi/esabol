@@ -1,3 +1,4 @@
+import { DatabaseError } from 'sequelize';
 import { User } from '../models/user.model.js';
 
 export const getUsers = async (req, res) => {
@@ -7,7 +8,12 @@ export const getUsers = async (req, res) => {
       return res.status(404).json({ msg: 'Users not found' });
     res.json(users);
   } catch (error) {
-    console.error(error);
+    // manejo de error en la estructura de la BD
+    if (error instanceof DatabaseError) {
+      console.error('There is a problem in the DB structure: ', error.message);
+      return res.status(500).json({ error: 'Intern error in database config' });
+    }
+
     res.status(500).json({ msg: 'Internal server error' });
   }
 };
@@ -27,16 +33,15 @@ export const getUser = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-    const { name, email } = req.body;
+    const { name, email, username, active, roleId } = req.body;
 
-    if (!name || !email)
+    if (!name || !email || !username || !roleId)
       return res.status(400).json({ msg: 'Bad request. Empty fields' });
-    const user = await User.create({ name, email });
+    const user = await User.create({ name, email, username, active, roleId });
 
     res.status(201).json(user);
   } catch (error) {
-    console.error(error);
-
+    // console.error(error)
     if (error.name === 'SequelizeUniqueConstraintError')
       return res.status(409).json({ msg: 'Email already exists' });
     res.status(500).json({ msg: 'Internal server error' });
