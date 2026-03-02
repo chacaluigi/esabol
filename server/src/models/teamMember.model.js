@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database';
 
-sequelize.define(
+export const TeamMember = sequelize.define(
   'TeamMember',
   {
     teamId: {

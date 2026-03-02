@@ -1,7 +1,7 @@
 import { sequelize } from '../config/database.js';
 import { DataTypes } from 'sequelize';
 
-sequelize.define('Task', {
+export const Task = sequelize.define('Task', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -18,10 +18,10 @@ sequelize.define('Task', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  assignee_user_id: {
+  assigneeUserId: {
     type: DataTypes.INTEGER,
   },
-  assignee_team_id: {
+  assigneeTeamId: {
     type: DataTypes.INTEGER,
   },
   priority: {
@@ -34,7 +34,7 @@ sequelize.define('Task', {
     defaultValue: 'To do',
     allowNull: false,
   },
-  estimated_days: {
+  estimatedDays: {
     type: DataTypes.INTEGER,
   },
   dueDate: {
