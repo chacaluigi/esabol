@@ -21,3 +21,21 @@ export const createRole = async (req, res) => {
     res.status(500).json({ msg: 'Internal server error' });
   }
 };
+
+export const updateRole = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const role = await Role.findByPk(id);
+
+    if (!role) return res.status(404).json({ msg: 'Role not found' });
+
+    role.set(data);
+    await role.save();
+
+    res.json(role);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: 'Internal server error' });
+  }
+};
