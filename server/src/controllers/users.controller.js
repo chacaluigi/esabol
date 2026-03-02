@@ -33,17 +33,20 @@ export const getUser = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-    const { name, email, username, active, roleId } = req.body;
-
-    if (!name || !email || !username || !roleId)
-      return res.status(400).json({ msg: 'Bad request. Empty fields' });
-    const user = await User.create({ name, email, username, active, roleId });
-
+    const user = await User.create(req.body);
     res.status(201).json(user);
   } catch (error) {
-    // console.error(error)
-    if (error.name === 'SequelizeUniqueConstraintError')
-      return res.status(409).json({ msg: 'Email already exists' });
+    console.error(error);
+    // errores de validacion
+    if (error.name === 'SequelizeValidationError') {
+      const messages = error.errors.map((e) => e.message);
+      return res.status(400).json({ errors: messages });
+    }
+    //errores de duplicidad, osea unique
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      const path = error.errors[0].path;
+      return res.status(409).json({ msg: `The ${path} is already registered` });
+    }
     res.status(500).json({ msg: 'Internal server error' });
   }
 };
