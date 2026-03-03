@@ -13,7 +13,8 @@ async function main() {
     //await sequelize.sync({ alter: true });
 
     //borra todas las tablas y las vuelve a crear
-    //sequelize.sync({ force: true });
+    //await sequelize.sync({ force: true });
+
     app.listen(PORT);
     console.log('Server running on port', PORT);
   } catch (error) {

@@ -23,11 +23,15 @@ Task.belongsTo(User, { foreignKey: 'assigneeUserId' });
 User.hasMany(Team, { foreignKey: 'leaderUserId' });
 Team.belongsTo(User, { foreignKey: 'leaderUserId' });
 
-User.belongsToMany(Team, { through: TeamMember });
-Team.belongsToMany(User, { through: TeamMember });
-
-// User.hasMany(TeamMember, { foreignKey: 'userId' });
-// TeamMember.belongsTo(User, { foreignKey: 'userId' });
+User.belongsToMany(Team, {
+  through: TeamMember,
+  foreignKey: 'userId',
+});
+Team.belongsToMany(User, {
+  through: TeamMember,
+  as: 'members',
+  foreignKey: 'teamId',
+});
 
 User.hasMany(DailyReport, { foreignKey: 'userId' });
 DailyReport.belongsTo(User, { foreignKey: 'userId' });
@@ -45,9 +49,6 @@ WorkdayType.belongsTo(DailyReport, { foreignKey: 'workdayTypeId' });
 
 Team.hasMany(Task, { foreignKey: 'assigneeTeamId' });
 Task.belongsTo(Team, { foreignKey: 'assigneeTeamId' });
-
-// Team.hasMany(TeamMember, { foreignKey: 'teamId' });
-// TeamMember.belongsTo(Team, { foreignKey: 'teamId' });
 
 export {
   sequelize,

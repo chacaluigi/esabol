@@ -1,4 +1,4 @@
-import { Team } from '../models/index.js';
+import { Team, User, TeamMember } from '../models/index.js';
 
 export const getTeams = async (req, res, next) => {
   try {
@@ -39,6 +39,85 @@ export const updateTeam = async (req, res, next) => {
 };
 
 export const deleteTeam = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const team = await Team.destroy({ where: { id } });
+
+    if (team === 0)
+      return res.status(404).json({ msg: 'Team does not exists' });
+
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getTeamMembers = async (req, res, next) => {
+  try {
+    const { teamId } = req.params;
+    const team = await Team.findByPk(teamId, {
+      include: [
+        {
+          model: User,
+          as: 'members',
+          attributes: ['id', 'name', 'username', 'email'],
+          through: { attributes: [] },
+        },
+      ],
+    });
+
+    if (!team) return res.status(404).json({ msg: 'Team not found' });
+
+    res.json(team.members || []);
+  } catch (error) {
+    //console.error(error);
+    next(error);
+  }
+};
+
+export const addMember = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const team = await Team.destroy({ where: { id } });
+
+    if (team === 0)
+      return res.status(404).json({ msg: 'Team does not exists' });
+
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const addMembers = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const team = await Team.destroy({ where: { id } });
+
+    if (team === 0)
+      return res.status(404).json({ msg: 'Team does not exists' });
+
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const removeMember = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const team = await Team.destroy({ where: { id } });
+
+    if (team === 0)
+      return res.status(404).json({ msg: 'Team does not exists' });
+
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const removeMembers = async (req, res, next) => {
   try {
     const { id } = req.params;
     const team = await Team.destroy({ where: { id } });
