@@ -4,10 +4,10 @@ import Role from './role.model.js';
 import User from './user.model.js';
 import Task from './task.model.js';
 import Team from './team.model.js';
-import TeamMember from './teamMember.model.js';
-import DailyReport from './dailyReport.model.js';
+import TeamMember from './team-member.model.js';
+import DailyReport from './daily-report.model.js';
 import Subtask from './subtask.model.js';
-import WorkdayType from './workdayType.model.js';
+import WorkdayType from './workday-type.model.js';
 
 Role.hasMany(User, { foreignKey: 'roleId' });
 User.belongsTo(Role, { foreignKey: 'roleId' });
@@ -23,8 +23,11 @@ Task.belongsTo(User, { foreignKey: 'assigneeUserId' });
 User.hasMany(Team, { foreignKey: 'leaderUserId' });
 Team.belongsTo(User, { foreignKey: 'leaderUserId' });
 
-User.hasMany(TeamMember, { foreignKey: 'userId' });
-TeamMember.belongsTo(User, { foreignKey: 'userId' });
+User.belongsToMany(Team, { through: TeamMember });
+Team.belongsToMany(User, { through: TeamMember });
+
+// User.hasMany(TeamMember, { foreignKey: 'userId' });
+// TeamMember.belongsTo(User, { foreignKey: 'userId' });
 
 User.hasMany(DailyReport, { foreignKey: 'userId' });
 DailyReport.belongsTo(User, { foreignKey: 'userId' });
@@ -43,8 +46,8 @@ WorkdayType.belongsTo(DailyReport, { foreignKey: 'workdayTypeId' });
 Team.hasMany(Task, { foreignKey: 'assigneeTeamId' });
 Task.belongsTo(Team, { foreignKey: 'assigneeTeamId' });
 
-Team.hasMany(TeamMember, { foreignKey: 'teamId' });
-TeamMember.belongsTo(Team, { foreignKey: 'teamId' });
+// Team.hasMany(TeamMember, { foreignKey: 'teamId' });
+// TeamMember.belongsTo(Team, { foreignKey: 'teamId' });
 
 export {
   sequelize,

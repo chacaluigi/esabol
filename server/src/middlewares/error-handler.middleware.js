@@ -32,7 +32,7 @@ export const errorHandler = (err, req, res, next) => {
 
   // manejo de error en la estructura de la BD
   if (err instanceof DatabaseError) {
-    console.error('There is a problem in the DB structure: ', err.message);
+    console.error('There is a problem in DB structure: ', err.message);
     return res.status(500).json({ error: 'Intern error in database config' });
   }
 
