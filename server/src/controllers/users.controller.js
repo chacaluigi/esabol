@@ -54,8 +54,7 @@ export const deleteUser = async (req, res, next) => {
     const { id } = req.params;
     const user = await User.destroy({ where: { id } });
 
-    if (user === 0)
-      return res.status(404).json({ msg: 'User does not exists.' });
+    if (!user) return res.status(404).json({ msg: 'User does not exists.' });
 
     res.sendStatus(204);
   } catch (error) {
