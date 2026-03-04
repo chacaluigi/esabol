@@ -22,3 +22,33 @@ export const getTasks = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getTask = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const task = await Task.findByPk(id);
+    if (!task) return res.status(404).json({ msg: 'Task not found' });
+    res.status(200).json(task);
+  } catch (error) {
+    //console.error(error);
+    next(error);
+  }
+};
+
+export const updateTask = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const task = await Task.findByPk(id);
+
+    if (!task) return res.status(404).json({ msg: 'Task not found to update' });
+
+    task.set(data);
+    await task.save();
+
+    res.status(200).json(task);
+  } catch (error) {
+    //console.error(error);
+    next(error);
+  }
+};
