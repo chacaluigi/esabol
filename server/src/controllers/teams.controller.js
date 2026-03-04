@@ -75,58 +75,36 @@ export const getTeamMembers = async (req, res, next) => {
   }
 };
 
-export const addMember = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const team = await Team.destroy({ where: { id } });
-
-    if (team === 0)
-      return res.status(404).json({ msg: 'Team does not exists' });
-
-    res.sendStatus(204);
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const addMembers = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const team = await Team.destroy({ where: { id } });
+    const { teamId } = req.params;
+    const { userIds } = req.body;
 
-    if (team === 0)
-      return res.status(404).json({ msg: 'Team does not exists' });
+    const team = await Team.findByPk(teamId);
+    if (!team) return res.status(404).json({ msg: 'Team not found' });
 
-    res.sendStatus(204);
+    await team.addMembers(userIds);
+
+    res.status(200).json({ msg: 'Members added successfully' });
   } catch (error) {
-    next(error);
-  }
-};
-
-export const removeMember = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const team = await Team.destroy({ where: { id } });
-
-    if (team === 0)
-      return res.status(404).json({ msg: 'Team does not exists' });
-
-    res.sendStatus(204);
-  } catch (error) {
+    //console.error(error);
     next(error);
   }
 };
 
 export const removeMembers = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const team = await Team.destroy({ where: { id } });
+    const { teamId } = req.params;
+    const { userIds } = req.body;
 
-    if (team === 0)
-      return res.status(404).json({ msg: 'Team does not exists' });
+    const team = await Team.findByPk(teamId);
+    if (!team) return res.status(404).json({ msg: 'Team not found' });
 
-    res.sendStatus(204);
+    await team.removeMembers(userIds);
+
+    res.status(200).json({ msg: 'Members removed successfully' });
   } catch (error) {
+    //console.error(error);
     next(error);
   }
 };
