@@ -7,10 +7,12 @@ const TeamMember = sequelize.define(
     teamId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      unique: 'team_user_unique',
     },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      unique: 'team_user_unique',
     },
   },
   { createdAt: 'joinedAt', updatedAt: false },
