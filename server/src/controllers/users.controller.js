@@ -1,4 +1,4 @@
-import { User } from '../models/index.js';
+import { Task, User } from '../models/index.js';
 
 export const getUsers = async (req, res, next) => {
   try {
@@ -57,6 +57,26 @@ export const deleteUser = async (req, res, next) => {
     if (!user) return res.status(404).json({ msg: 'User does not exists.' });
 
     res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// obtener tareas de un usuario
+export const getUserTasks = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findByPk(userId, {
+      include: [
+        {
+          model: Task,
+        },
+      ],
+    });
+
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+
+    res.status(200).json(user.Tasks);
   } catch (error) {
     next(error);
   }
