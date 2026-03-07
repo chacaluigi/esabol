@@ -1,4 +1,4 @@
-import { Team, User, TeamMember } from '../models/index.js';
+import { Task, Team, User } from '../models/index.js';
 
 export const getTeams = async (req, res, next) => {
   try {
@@ -105,6 +105,26 @@ export const removeMembers = async (req, res, next) => {
     res.status(200).json({ msg: 'Members removed successfully' });
   } catch (error) {
     //console.error(error);
+    next(error);
+  }
+};
+
+// obtener tareas de un team
+export const getTeamTasks = async (req, res, next) => {
+  try {
+    const { teamId } = req.params;
+    const team = await Team.findByPk(teamId, {
+      include: [
+        {
+          model: Task,
+        },
+      ],
+    });
+
+    if (!team) return res.status(404).json({ msg: 'Team not found' });
+
+    res.status(200).json(team.Tasks);
+  } catch (error) {
     next(error);
   }
 };

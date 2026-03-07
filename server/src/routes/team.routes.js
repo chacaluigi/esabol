@@ -5,6 +5,7 @@ import {
   deleteTeam,
   getTeamMembers,
   getTeams,
+  getTeamTasks,
   removeMembers,
   updateTeam,
 } from '../controllers/teams.controller.js';
@@ -19,5 +20,7 @@ router.delete('/:id', deleteTeam);
 router.get('/:teamId/members', getTeamMembers);
 router.post('/:teamId/members', addMembers);
 router.delete('/:teamId/members', removeMembers);
+
+router.get('/:teamId/tasks', getTeamTasks);
 
 export default router;
