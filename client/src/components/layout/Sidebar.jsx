@@ -8,7 +8,7 @@ export function Sidebar() {
   return (
     <aside className="w-64 h-screen bg-[#22252a] text-gray-300 flex flex-col fixed left-0 top-0 z-20">
       {/* Profile Header */}
-      <div className="h-24 bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center rounded-br-3xl">
+      <div className="h-20 bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center rounded-tr-4xl">
         <div className="w-16 h-16 rounded-full border-4 border-[#22252a] bg-blue-100 flex items-center justify-center overflow-hidden">
           <span className="text-blue-500 font-bold">ML</span>
         </div>
