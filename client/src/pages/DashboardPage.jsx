@@ -12,7 +12,6 @@ import {
   Cell,
 } from 'recharts';
 
-// Datos de ejemplo para los gráficos
 const barData = [
   { name: 'A', uv: 20 },
   { name: 'B', uv: 35 },
