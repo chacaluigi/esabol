@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import UserList from '../features/users/components/UserList';
-import Layout from '../components/Layout';
+import Layout from '../pages/DashboardPage';
 
 export const router = createBrowserRouter([
   {

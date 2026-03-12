@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Paleta del Dashboard basada en tu diseño */
+    --dash-bg: 220 14% 96%; /* #f4f5f7 - Gris claro del fondo */
+    --dash-sidebar: 222 11% 16%; /* #22252a - Gris oscuro del sidebar */
+    --dash-sidebar-hover: 220 10% 20%;
+
+    --dash-primary: 217 100% 50%; /* Azul principal */
+    --dash-primary-gradient-start: 255 85% 60%; /* Morado/Azul oscuro del header */
+    --dash-primary-gradient-end: 198 100% 50%; /* Azul claro del header */
+
+    --dash-card-bg: 0 0% 100%; /* Blanco */
+    --dash-text-muted: 215 16% 47%;
+
+    /* Variables base para Shadcn UI */
+    --background: var(--dash-bg);
+    --foreground: 222.2 84% 4.9%;
+    --card: var(--dash-card-bg);
+    --card-foreground: 222.2 84% 4.9%;
+    --primary: var(--dash-primary);
+    --primary-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --radius: 0.5rem;
+  }
+}
