@@ -8,6 +8,7 @@ import {
   Lock,
 } from 'lucide-react';
 import DashboardPage from '@/pages/DashboardPage';
+import UserPage from '@/pages/UserPage';
 
 export const navConfig = {
   mainNav: [
@@ -18,10 +19,10 @@ export const navConfig = {
       component: DashboardPage,
     },
     {
-      title: 'Account',
-      href: '/account',
+      title: 'Usuarios',
+      href: '/users',
       icon: User,
-      component: () => <div className="p-8">Account Page</div>, // Placeholder
+      component: UserPage,
     },
     {
       title: 'Location',

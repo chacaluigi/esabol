@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 
 export function Header() {
   return (
-    <header className="h-20 bg-gradient-to-r from-indigo-600 to-sky-400 flex items-center justify-between px-8 ml-64 fixed top-0 right-0 left-0 z-10">
+    <header className="h-20 bg-gradient-to-r from-indigo-700 to-sky-400 flex items-center justify-between px-8 ml-64 fixed top-0 right-0 left-0 z-10">
       <div className="flex-1 max-w-2xl">
         <div className="relative flex items-center w-full">
           <Input
