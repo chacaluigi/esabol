@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUsers } from '@/features/users/hooks/useUsers';
 import {
   Table,
@@ -15,8 +15,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { UserStatusBadge } from '@/components/users/UserStatusBadge';
-import { UserFormModal } from '@/components/users/UserFormModal';
+import { UserStatusBadge } from '@/features/users/components/UserStatusBadge';
+import { UserFormModal } from '@/features/users/components/UserFormModal';
 import {
   MoreHorizontal,
   Plus,
@@ -27,15 +27,51 @@ import {
 } from 'lucide-react';
 
 const UserPage = () => {
-  const { users, loading, refresh } = useUsers();
+  const { users, loading, refresh, addUser, updateUser, deleteUser } =
+    useUsers();
+  const [roles, setRoles] = useState([]);
   const [modalConfig, setModalConfig] = useState({
     open: false,
     user: null,
     mode: 'view',
   });
 
+  useEffect(() => {
+    // Cargar roles al montar el componente
+    const fetchRoles = async () => {
+      const data = await getAllRoles();
+      setRoles(data);
+    };
+    fetchRoles();
+  }, []);
+
   const openModal = (user, mode) => {
     setModalConfig({ open: true, user, mode });
+  };
+
+  const handleSave = async (data) => {
+    let result;
+
+    if (modalConfig.mode === 'add') {
+      result = await addUser(data);
+    } else if (modalConfig.mode === 'edit') {
+      result = await updateUser(modalConfig.user.id, data);
+    }
+
+    if (result?.success) {
+      setModalConfig((prev) => ({ ...prev, open: false }));
+      // Opcional: mostrar un toast de éxito aquí
+    } else {
+      alert('Error: ' + result.error);
+    }
+  };
+
+  // 3. Función para manejar la eliminación
+  const handleDelete = async (id) => {
+    if (window.confirm('¿Estás seguro de eliminar este usuario?')) {
+      const result = await deleteUser(id);
+      if (!result.success) alert(result.error);
+    }
   };
 
   return (
@@ -106,7 +142,10 @@ const UserPage = () => {
                       <DropdownMenuItem onClick={() => openModal(user, 'edit')}>
                         <Edit className="mr-2 h-4 w-4 text-slate-400" /> Editar
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="text-red-600 focus:text-red-700">
+                      <DropdownMenuItem
+                        className="text-red-600 focus:text-red-700"
+                        onClick={() => handleDelete(user.id)}
+                      >
                         <Trash2 className="mr-2 h-4 w-4" /> Eliminar
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -124,6 +163,8 @@ const UserPage = () => {
         onOpenChange={(open) => setModalConfig((prev) => ({ ...prev, open }))}
         user={modalConfig.user}
         mode={modalConfig.mode}
+        roles={roles}
+        onSave={handleSave}
       />
     </div>
   );
