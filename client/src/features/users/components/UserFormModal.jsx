@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+import { useRoleStore } from '../store/useRoleStore';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -24,11 +27,13 @@ export function UserFormModal({
   user,
   mode = 'view',
   onSave,
-  roles = [],
 }) {
   const isReadOnly = mode === 'view';
-  // Necesitamos controlar el valor del select manualmente si no usamos una librería de formularios
-  const [selectedRole, setSelectedRole] = useState(user?.roleId?.toString());
+  const { roles, fetchRoles } = useRoleStore();
+
+  useEffect(() => {
+    if (open) fetchRoles();
+  }, [open, fetchRoles]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,8 +42,8 @@ export function UserFormModal({
       name: formData.get('name'),
       email: formData.get('email'),
       username: formData.get('username'),
+      roleId: formData.get('roleId'),
       status: formData.get('status') === 'on',
-      roleId: parseInt(selectedRole),
     };
     onSave(data);
   };
@@ -88,11 +93,12 @@ export function UserFormModal({
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="roleId">Rol de Usuario</Label>
+              <Label htmlFor="roleId">Rol del Usuario</Label>
               <Select
-                disabled={isReadOnly}
-                onValueChange={setSelectedRole}
+                name="roleId"
                 defaultValue={user?.roleId?.toString()}
+                disabled={isReadOnly}
+                required
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecciona un rol" />

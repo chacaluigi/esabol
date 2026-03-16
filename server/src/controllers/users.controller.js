@@ -1,8 +1,16 @@
-import { Task, User } from '../models/index.js';
+import { Role, Task, User } from '../models/index.js';
 
 export const getUsers = async (req, res, next) => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      include: [
+        {
+          model: Role,
+          attributes: ['id', 'name'],
+        },
+      ],
+    });
+
     if (users.length === 0)
       return res.status(404).json({ msg: 'Users not found' });
     res.json(users);
@@ -26,7 +34,12 @@ export const getUser = async (req, res, next) => {
 export const createUser = async (req, res, next) => {
   try {
     const user = await User.create(req.body);
-    res.status(201).json(user);
+
+    const userWithRole = await User.findByPk(user.id, {
+      include: [{ model: Role, attributes: ['name'] }],
+    });
+
+    res.status(201).json(userWithRole);
   } catch (error) {
     next(error);
   }
@@ -35,15 +48,13 @@ export const createUser = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const data = req.body;
-    const user = await User.findByPk(id);
+    await User.update(req.body, { where: { id } });
 
-    if (!user) return res.status(404).json({ msg: 'User not found' });
+    const updatedUser = await User.findByPk(id, {
+      include: [{ model: Role, attributes: ['name'] }],
+    });
 
-    user.set(data);
-    await user.save();
-
-    res.json(user);
+    res.json(updatedUser);
   } catch (error) {
     next(error);
   }

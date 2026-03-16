@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useUsers } from '@/features/users/hooks/useUsers';
 import {
   Table,
@@ -29,21 +29,11 @@ import {
 const UserPage = () => {
   const { users, loading, refresh, addUser, updateUser, deleteUser } =
     useUsers();
-  const [roles, setRoles] = useState([]);
   const [modalConfig, setModalConfig] = useState({
     open: false,
     user: null,
     mode: 'view',
   });
-
-  useEffect(() => {
-    // Cargar roles al montar el componente
-    const fetchRoles = async () => {
-      const data = await getAllRoles();
-      setRoles(data);
-    };
-    fetchRoles();
-  }, []);
 
   const openModal = (user, mode) => {
     setModalConfig({ open: true, user, mode });
@@ -110,6 +100,7 @@ const UserPage = () => {
             <TableRow>
               <TableHead className="font-semibold">Usuario</TableHead>
               <TableHead className="font-semibold">Email</TableHead>
+              <TableHead className="font-semibold">Rol</TableHead>
               <TableHead className="font-semibold">Estado</TableHead>
               <TableHead className="text-right font-semibold">
                 Acciones
@@ -124,6 +115,13 @@ const UserPage = () => {
               >
                 <TableCell className="font-medium">{user.name}</TableCell>
                 <TableCell className="text-slate-500">{user.email}</TableCell>
+                <TableCell className="font-medium">
+                  <div>
+                    <p className="text-xs text-slate-400 font-normal">
+                      {user.Role?.name || 'Sin rol'}{' '}
+                    </p>
+                  </div>
+                </TableCell>
                 <TableCell>
                   <UserStatusBadge status={user.status} />
                 </TableCell>
@@ -163,7 +161,6 @@ const UserPage = () => {
         onOpenChange={(open) => setModalConfig((prev) => ({ ...prev, open }))}
         user={modalConfig.user}
         mode={modalConfig.mode}
-        roles={roles}
         onSave={handleSave}
       />
     </div>
