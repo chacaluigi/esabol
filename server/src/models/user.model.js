@@ -21,7 +21,7 @@ const User = sequelize.define('User', {
     allowNull: false,
     unique: 'user_username_unique',
   },
-  active: {
+  status: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: true,
