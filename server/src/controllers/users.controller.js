@@ -9,6 +9,7 @@ export const getUsers = async (req, res, next) => {
           attributes: ['id', 'name'],
         },
       ],
+      order: [['createdAt', 'DESC']],
     });
 
     if (users.length === 0)
