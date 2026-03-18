@@ -11,34 +11,53 @@ import {
 const Toaster = ({ ...props }) => {
   const { theme = 'light' } = useTheme();
 
+  const iconClass = 'size-4 animate-in fade-in duration-500 fill-none';
+  const delayStyle = {
+    animationDelay: '1000ms',
+    animationFillMode: 'backwards',
+  };
+
   return (
     <Sonner
       theme={theme}
       className="toaster group"
       icons={{
-        success: <CircleCheckIcon className="size-4 text-green-500" />,
-        info: <InfoIcon className="size-4 text-blue-500" />,
-        warning: <TriangleAlertIcon className="size-4 text-amber-500" />,
-        error: <OctagonXIcon className="size-4 text-red-500" />,
+        success: (
+          <CircleCheckIcon
+            className={`${iconClass} text-green-500`}
+            style={delayStyle}
+          />
+        ),
+        info: (
+          <InfoIcon
+            className={`${iconClass} text-blue-500`}
+            style={delayStyle}
+          />
+        ),
+        warning: (
+          <TriangleAlertIcon
+            className={`${iconClass} text-amber-500`}
+            style={delayStyle}
+          />
+        ),
+        error: (
+          <OctagonXIcon
+            className={`${iconClass} text-red-500`}
+            style={delayStyle}
+          />
+        ),
         loading: (
           <Loader2Icon className="size-4 animate-spin text-dash-primary" />
         ),
       }}
-      //utilizar variables de global.css
       toastOptions={{
         classNames: {
           toast:
             'group toast font-sans border-border bg-card text-foreground shadow-lg rounded-[var(--radius)]',
           description: 'text-dash-text-muted text-xs',
-          actionButton: 'bg-primary text-primary-foreground font-medium',
-          cancelButton: 'bg-muted text-muted-foreground',
-          success:
-            'border-green-500/20 bg-green-50/50 text-green-900 dark:text-green-100',
-          error:
-            'border-red-500/20 bg-red-50/50 text-red-900 dark:text-red-100',
+          content: 'transition-all duration-300',
         },
       }}
-      //estilos CSS inline para compatibilidad con Sonner
       style={{
         '--normal-bg': 'hsl(var(--card))',
         '--normal-text': 'hsl(var(--foreground))',

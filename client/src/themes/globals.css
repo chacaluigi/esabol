@@ -48,3 +48,22 @@
     --foreground: 210 40% 98%;
   }
 }
+
+@layer utilities {
+  .animate-in {
+    animation-name: enter;
+    animation-duration: 500ms;
+    --tw-enter-opacity: 0;
+  }
+
+  @keyframes enter {
+    from {
+      opacity: var(--tw-enter-opacity, 1);
+      transform: scale(var(--tw-enter-scale, 1));
+    }
+  }
+
+  .fade-in {
+    --tw-enter-opacity: 0;
+  }
+}
