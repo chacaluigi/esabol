@@ -49,6 +49,7 @@ const UserPage = () => {
     }
 
     if (result?.success) {
+      await refresh();
       setModalConfig((prev) => ({ ...prev, open: false }));
       // Opcional: mostrar un toast de éxito aquí
     } else {

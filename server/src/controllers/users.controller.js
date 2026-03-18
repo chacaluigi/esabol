@@ -38,12 +38,7 @@ export const getUser = async (req, res, next) => {
 export const createUser = async (req, res, next) => {
   try {
     const user = await User.create(req.body);
-
-    const userWithRole = await User.findByPk(user.id, {
-      include: [{ model: Role, attributes: ['name'] }],
-    });
-
-    res.status(201).json(userWithRole);
+    res.status(201).json({ success: true, id: user.id });
   } catch (error) {
     next(error);
   }
@@ -53,12 +48,7 @@ export const updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     await User.update(req.body, { where: { id } });
-
-    const updatedUser = await User.findByPk(id, {
-      include: [{ model: Role, attributes: ['name'] }],
-    });
-
-    res.json(updatedUser);
+    res.json({ success: true });
   } catch (error) {
     next(error);
   }
