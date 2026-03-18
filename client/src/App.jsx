@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Toaster } from '@/components/ui/sonner';
 
 function App() {
-  const isAuthenticated = true; // Simulación de estado de sesión
+  const isAuthenticated = true; // simulación de estado de sesión
 
   return (
     <>

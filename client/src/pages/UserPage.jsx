@@ -26,6 +26,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { UserTableSkeleton } from '@/features/users/components/UserTableSkeleton';
 
 const UserPage = () => {
   const { users, loading, refresh, addUser, updateUser, deleteUser } =
@@ -65,7 +66,6 @@ const UserPage = () => {
     if (result?.success) {
       await refresh();
       setModalConfig((prev) => ({ ...prev, open: false }));
-
       //toast para mostrar mensaje de éxito
       toast.success(
         modalConfig.mode === 'add'
@@ -90,6 +90,8 @@ const UserPage = () => {
       }
     }
   };
+
+  const showSkeleton = loading && users.length === 0;
 
   return (
     <div className="space-y-6">
@@ -134,55 +136,72 @@ const UserPage = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {users.map((user) => (
-              <TableRow
-                key={user.id}
-                className="hover:bg-slate-50/50 transition-colors"
-              >
-                <TableCell className="font-medium">{user.name}</TableCell>
-                <TableCell className="text-slate-500">{user.email}</TableCell>
-                <TableCell className="font-medium">
-                  <div>
-                    <p className="text-xs text-slate-400 font-normal">
-                      {user.Role?.name || 'Sin rol'}{' '}
-                    </p>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <UserStatusBadge status={user.status} />
-                </TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-40">
-                      <DropdownMenuItem onClick={() => openModal(user, 'view')}>
-                        <Eye className="mr-2 h-4 w-4 text-slate-400" /> Ver
-                        detalles
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => openModal(user, 'edit')}>
-                        <Edit className="mr-2 h-4 w-4 text-slate-400" /> Editar
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="text-red-600 focus:text-red-700"
-                        onClick={() => handleDelete(user.id)}
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" /> Eliminar
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+
+          {showSkeleton ? (
+            <UserTableSkeleton rows={5} /> // cantidad de filas skeleton para colocar
+          ) : (
+            <TableBody>
+              {users.map((user) => (
+                <TableRow
+                  key={user.id}
+                  className="hover:bg-slate-50/50 transition-colors"
+                >
+                  <TableCell className="font-medium">{user.name}</TableCell>
+                  <TableCell className="text-slate-500">{user.email}</TableCell>
+                  <TableCell className="font-medium">
+                    <div>
+                      <p className="text-xs text-slate-400 font-normal">
+                        {user.Role?.name || 'Sin rol'}{' '}
+                      </p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <UserStatusBadge status={user.status} />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuItem
+                          onClick={() => openModal(user, 'view')}
+                        >
+                          <Eye className="mr-2 h-4 w-4 text-slate-400" /> Ver
+                          detalles
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => openModal(user, 'edit')}
+                        >
+                          <Edit className="mr-2 h-4 w-4 text-slate-400" />{' '}
+                          Editar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-red-600 focus:text-red-700"
+                          onClick={() => handleDelete(user.id)}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" /> Eliminar
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
         </Table>
+
+        {/* en caso de qu no haya usuarios y no está cargando */}
+        {!showSkeleton && users.length === 0 && (
+          <div className="text-center py-12 text-slate-500">
+            No se encontraron usuarios en la institución.
+          </div>
+        )}
       </div>
 
-      {/* Modal único controlado por estado */}
+      {/* modal único controlado por estado */}
       <UserFormModal
         open={modalConfig.open}
         onOpenChange={(open) => setModalConfig((prev) => ({ ...prev, open }))}
