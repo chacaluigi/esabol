@@ -47,7 +47,12 @@ export const createUser = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
-    await User.update(req.body, { where: { id } });
+    const user = await User.findByPk(id);
+
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+
+    user.set(req.body);
+    await user.save();
     res.json({ success: true });
   } catch (error) {
     next(error);

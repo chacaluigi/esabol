@@ -39,7 +39,20 @@ const UserPage = () => {
     setModalConfig({ open: true, user, mode });
   };
 
+  // para comparar si hubo cambios al guardar
+  const hasChanges = (newData, originalData) => {
+    return Object.keys(newData).some(
+      (key) => newData[key] !== originalData[key],
+    );
+  };
+
   const handleSave = async (data) => {
+    // primero comprobamos si hubo cambios en el form
+    if (modalConfig.mode === 'edit' && !hasChanges(data, modalConfig.user)) {
+      setModalConfig((prev) => ({ ...prev, open: false }));
+      return;
+    }
+
     let result;
 
     if (modalConfig.mode === 'add') {
