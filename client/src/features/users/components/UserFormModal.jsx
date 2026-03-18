@@ -19,6 +19,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { LoadingOverlay } from '@/components/ui/loading-overlay';
 
 export function UserFormModal({
   open,
@@ -26,6 +27,7 @@ export function UserFormModal({
   user,
   mode = 'view',
   onSave,
+  isLoading,
 }) {
   const isReadOnly = mode === 'view';
   const { roles, fetchRoles } = useRoleStore();
@@ -48,9 +50,15 @@ export function UserFormModal({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit}>
+    <Dialog open={open} onOpenChange={(val) => !isLoading && onOpenChange(val)}>
+      <DialogContent
+        className="sm:max-w-[425px] overflow-hidden p-0"
+        onPointerDownOutside={(e) => isLoading && e.preventDefault()} // Evita cerrar al clickear fuera
+        onEscapeKeyDown={(e) => isLoading && e.preventDefault()} // Evita cerrar con ESC
+      >
+        <form onSubmit={handleSubmit} className="relative p-6">
+          {/* muestra bloqueo si está cargando */}
+          {isLoading && <LoadingOverlay message="Guardando cambios..." />}
           <DialogHeader>
             <DialogTitle>
               {mode === 'add' && 'Agregar Usuario'}
@@ -124,12 +132,20 @@ export function UserFormModal({
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              disabled={isLoading}
+            >
               {isReadOnly ? 'Cerrar' : 'Cancelar'}
             </Button>
             {!isReadOnly && (
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                Guardar cambios
+              <Button
+                type="submit"
+                className="bg-blue-600 hover:bg-blue-700"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Guardando...' : 'Guardar cambios'}
               </Button>
             )}
           </DialogFooter>

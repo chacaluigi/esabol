@@ -39,7 +39,7 @@ const UserPage = () => {
     setModalConfig({ open: true, user, mode });
   };
 
-  // para comparar si hubo cambios al guardar
+  // para comparar si hubo cambios al editar
   const hasChanges = (newData, originalData) => {
     return Object.keys(newData).some(
       (key) => newData[key] !== originalData[key],
@@ -64,13 +64,13 @@ const UserPage = () => {
     if (result?.success) {
       await refresh();
       setModalConfig((prev) => ({ ...prev, open: false }));
-      // Opcional: mostrar un toast de éxito aquí
+      // luego buscar un toast para mostrar mensaje de éxito
     } else {
       alert('Error: ' + result.error);
     }
   };
 
-  // 3. Función para manejar la eliminación
+  // para manejar la eliminación
   const handleDelete = async (id) => {
     if (window.confirm('¿Estás seguro de eliminar este usuario?')) {
       const result = await deleteUser(id);
@@ -176,6 +176,7 @@ const UserPage = () => {
         user={modalConfig.user}
         mode={modalConfig.mode}
         onSave={handleSave}
+        isLoading={loading}
       />
     </div>
   );

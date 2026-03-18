@@ -22,26 +22,34 @@ export const useUsers = () => {
       setUsers(data);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleAdd = async (userData) => {
+    setLoading(true);
     try {
       const newUser = await userService.createUser(userData);
       addUser(newUser);
       return { success: true };
     } catch (err) {
       return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleUpdate = async (id, userData) => {
+    setLoading(true);
     try {
       const updatedUser = await userService.updateUser(id, userData);
       updateUserInList(updatedUser);
       return { success: true };
     } catch (err) {
       return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
     }
   };
 
