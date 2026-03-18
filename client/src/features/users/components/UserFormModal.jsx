@@ -19,7 +19,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { useState } from 'react';
 
 export function UserFormModal({
   open,
@@ -42,7 +41,7 @@ export function UserFormModal({
       name: formData.get('name'),
       email: formData.get('email'),
       username: formData.get('username'),
-      roleId: formData.get('roleId'),
+      roleId: Number(formData.get('roleId')),
       status: formData.get('status') === 'on',
     };
     onSave(data);
