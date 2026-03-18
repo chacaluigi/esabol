@@ -1,4 +1,5 @@
 .env
+pending_tasks.txt
 
 # Logs
 logs

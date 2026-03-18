@@ -25,5 +25,26 @@
     --primary-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --radius: 0.5rem;
+
+    /* Colores de estado interactivos */
+    --success: 142.1 70.6% 45.3%;
+    --success-foreground: 144.4 61.1% 92.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --warning: 38 92% 50%;
+
+    /* Aseguramos que Popover use el fondo de carta para los toasts */
+    --popover: var(--dash-card-bg);
+    --popover-foreground: var(--foreground);
+    --muted: 210 40% 96.1%;
+    --muted-foreground: var(--dash-text-muted);
+  }
+
+  /*modo oscuro */
+  .dark {
+    --dash-bg: 224 71% 4%;
+    --dash-card-bg: 224 71% 4%;
+    --border: 217.2 32.6% 17.5%;
+    --foreground: 210 40% 98%;
   }
 }

@@ -25,6 +25,7 @@ import {
   Edit,
   Trash2,
 } from 'lucide-react';
+import { toast } from 'sonner';
 
 const UserPage = () => {
   const { users, loading, refresh, addUser, updateUser, deleteUser } =
@@ -64,9 +65,17 @@ const UserPage = () => {
     if (result?.success) {
       await refresh();
       setModalConfig((prev) => ({ ...prev, open: false }));
-      // luego buscar un toast para mostrar mensaje de éxito
+
+      //toast para mostrar mensaje de éxito
+      toast.success(
+        modalConfig.mode === 'add'
+          ? 'Usuario creado correctamente'
+          : 'Datos actualizados con éxito',
+      );
     } else {
-      alert('Error: ' + result.error);
+      //alert('Error: ' + result.error);
+      //notificacion de error
+      toast.error('Ocurrió un problema: ' + result.error);
     }
   };
 
@@ -74,7 +83,11 @@ const UserPage = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Estás seguro de eliminar este usuario?')) {
       const result = await deleteUser(id);
-      if (!result.success) alert(result.error);
+      if (result.success) {
+        toast.success('Usuario eliminado');
+      } else {
+        toast.error('No se pudo eliminar al usuario');
+      }
     }
   };
 
