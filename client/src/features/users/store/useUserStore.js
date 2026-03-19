@@ -4,11 +4,13 @@ export const useUserStore = create((set) => ({
   users: [],
   loading: false,
   error: null,
+  totalPages: 1,
 
-  // Acciones para modificar el estado
+  //acciones para modificar el estado
   setUsers: (data) => set({ users: data, loading: false }),
   setLoading: (status) => set({ loading: status }),
   setError: (msg) => set({ error: msg, loading: false }),
+  setTotalPages: (count) => set({ totalPages: count, loading: false }),
 
   addUser: (user) =>
     set((state) => ({

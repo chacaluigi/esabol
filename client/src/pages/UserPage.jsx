@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useUsers } from '@/features/users/hooks/useUsers';
 import {
   Table,
@@ -35,6 +35,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { useSearchParams } from 'react-router-dom';
 
 const UserPage = () => {
   const {
@@ -44,7 +45,6 @@ const UserPage = () => {
     addUser,
     updateUser,
     deleteUser,
-    page,
     totalPages,
   } = useUsers();
   const [modalConfig, setModalConfig] = useState({
@@ -108,6 +108,21 @@ const UserPage = () => {
   };
 
   const showSkeleton = loading && users.length === 0;
+
+  //para la paginacion
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentPage = parseInt(searchParams.get('page')) || 1;
+
+  // Cada vez que la página en la URL cambie, disparamos la petición al API
+  useEffect(() => {
+    refresh(currentPage);
+  }, [currentPage]);
+
+  // Función para cambiar de página actualizando la URL
+  const handlePageChange = (newPage) => {
+    setSearchParams({ page: newPage });
+  };
 
   return (
     <div className="space-y-6">
@@ -217,40 +232,46 @@ const UserPage = () => {
       </div>
 
       {/*para la paginación */}
-      <div className="py-4">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={() => page > 1 && refresh(page - 1)}
-                className={page === 1 ? 'pointer-events-none opacity-50' : ''}
-              />
-            </PaginationItem>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() =>
+                currentPage > 1 && handlePageChange(currentPage - 1)
+              }
+              className={
+                currentPage === 1
+                  ? 'pointer-events-none opacity-50'
+                  : 'cursor-pointer'
+              }
+            />
+          </PaginationItem>
 
-            {[...Array(totalPages)].map((_, i) => (
-              <PaginationItem key={i}>
-                <PaginationLink
-                  isActive={page === i + 1}
-                  onClick={() => refresh(i + 1)}
-                >
-                  {i + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={() => page < totalPages && refresh(page + 1)}
-                className={
-                  page === totalPages ? 'pointer-events-none opacity-50' : ''
-                }
-              />
+          {[...Array(totalPages)].map((_, i) => (
+            <PaginationItem key={i} className="cursor-pointer">
+              <PaginationLink
+                isActive={currentPage === i + 1}
+                onClick={() => handlePageChange(i + 1)}
+              >
+                {i + 1}
+              </PaginationLink>
             </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
+          ))}
+
+          <PaginationItem>
+            <PaginationNext
+              onClick={() =>
+                currentPage < totalPages && handlePageChange(currentPage + 1)
+              }
+              className={
+                currentPage === totalPages
+                  ? 'pointer-events-none opacity-50'
+                  : 'cursor-pointer'
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
 
       {/* modal único controlado por estado */}
       <UserFormModal

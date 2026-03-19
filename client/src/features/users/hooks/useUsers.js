@@ -2,30 +2,28 @@ import { useEffect, useState } from 'react';
 import { useUserStore } from '@/features/users/store/useUserStore';
 import * as userService from '@/services/userService';
 
-export const useUsers = (initialPage = 1) => {
+export const useUsers = () => {
   const {
     users,
     loading,
     error,
+    totalPages,
     setUsers,
     setLoading,
     setError,
+    setTotalPages,
     addUser,
     updateUserInList,
     removeUserFromList,
   } = useUserStore();
 
-  const [page, setPage] = useState(initialPage);
-  const [paginationData, setPaginationData] = useState({ totalPages: 1 });
-
-  const fetchUsers = async (pageToFetch = 1) => {
+  const fetchUsers = async (page = 1) => {
     setLoading(true);
     try {
-      const data = await userService.getAllUsers(pageToFetch);
-      //console.log(data);
-      setUsers(data.users);
-      setPaginationData({ totalPages: data.totalPages });
-      setPage(pageToFetch);
+      const response = await userService.getAllUsers(page);
+      //console.log(response);
+      setUsers(response.users);
+      setTotalPages(response.totalPages);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -70,9 +68,9 @@ export const useUsers = (initialPage = 1) => {
   };
 
   // useEffect para que solo cargue si la lista está vacía
-  useEffect(() => {
-    if (users.length === 0) fetchUsers();
-  }, []);
+  // useEffect(() => {
+  //   if (users.length === 0) fetchUsers();
+  // }, []);
 
   return {
     users,
@@ -82,7 +80,6 @@ export const useUsers = (initialPage = 1) => {
     addUser: handleAdd,
     updateUser: handleUpdate,
     deleteUser: handleDelete,
-    page,
-    totalPages: paginationData.totalPages,
+    totalPages,
   };
 };
