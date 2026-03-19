@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useUserStore } from '@/features/users/store/useUserStore';
 import * as userService from '@/services/userService';
 
-export const useUsers = () => {
+export const useUsers = (initialPage = 1) => {
   const {
     users,
     loading,
@@ -15,11 +15,17 @@ export const useUsers = () => {
     removeUserFromList,
   } = useUserStore();
 
-  const fetchUsers = async () => {
+  const [page, setPage] = useState(initialPage);
+  const [paginationData, setPaginationData] = useState({ totalPages: 1 });
+
+  const fetchUsers = async (pageToFetch = 1) => {
     setLoading(true);
     try {
-      const data = await userService.getAllUsers();
-      setUsers(data);
+      const data = await userService.getAllUsers(pageToFetch);
+      //console.log(data);
+      setUsers(data.users);
+      setPaginationData({ totalPages: data.totalPages });
+      setPage(pageToFetch);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -76,5 +82,7 @@ export const useUsers = () => {
     addUser: handleAdd,
     updateUser: handleUpdate,
     deleteUser: handleDelete,
+    page,
+    totalPages: paginationData.totalPages,
   };
 };

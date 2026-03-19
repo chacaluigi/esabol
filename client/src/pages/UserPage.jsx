@@ -27,10 +27,26 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { UserTableSkeleton } from '@/features/users/components/UserTableSkeleton';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 
 const UserPage = () => {
-  const { users, loading, refresh, addUser, updateUser, deleteUser } =
-    useUsers();
+  const {
+    users,
+    loading,
+    refresh,
+    addUser,
+    updateUser,
+    deleteUser,
+    page,
+    totalPages,
+  } = useUsers();
   const [modalConfig, setModalConfig] = useState({
     open: false,
     user: null,
@@ -192,13 +208,48 @@ const UserPage = () => {
             </TableBody>
           )}
         </Table>
-
         {/* en caso de qu no haya usuarios y no está cargando */}
         {!showSkeleton && users.length === 0 && (
           <div className="text-center py-12 text-slate-500">
             No se encontraron usuarios en la institución.
           </div>
         )}
+      </div>
+
+      {/*para la paginación */}
+      <div className="py-4">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={() => page > 1 && refresh(page - 1)}
+                className={page === 1 ? 'pointer-events-none opacity-50' : ''}
+              />
+            </PaginationItem>
+
+            {[...Array(totalPages)].map((_, i) => (
+              <PaginationItem key={i}>
+                <PaginationLink
+                  isActive={page === i + 1}
+                  onClick={() => refresh(i + 1)}
+                >
+                  {i + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={() => page < totalPages && refresh(page + 1)}
+                className={
+                  page === totalPages ? 'pointer-events-none opacity-50' : ''
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
 
       {/* modal único controlado por estado */}

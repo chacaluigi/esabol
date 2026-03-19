@@ -1,23 +1,35 @@
 import { Role, Task, User } from '../models/index.js';
 
 export const getUsers = async (req, res, next) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
+
   try {
-    const users = await User.findAll({
+    const { count, rows } = await User.findAndCountAll({
       include: [
         {
           model: Role,
           attributes: ['id', 'name'],
         },
       ],
+      limit,
+      offset,
       order: [
         ['status', 'DESC'],
         ['createdAt', 'DESC'],
       ],
     });
 
-    if (users.length === 0)
+    if (rows.length === 0)
       return res.status(404).json({ msg: 'Users not found' });
-    res.json(users);
+
+    res.json({
+      users: rows,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+      totalItems: count,
+    });
   } catch (error) {
     next(error);
   }

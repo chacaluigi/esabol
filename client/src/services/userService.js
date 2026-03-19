@@ -1,7 +1,7 @@
 import api from '@/api/apiConfig.js';
 
-export const getAllUsers = async () => {
-  const response = await api.get('/users');
+export const getAllUsers = async (pageToFetch) => {
+  const response = await api.get(`/users?page=${pageToFetch}&limit=10`);
   return response.data;
 };
 
