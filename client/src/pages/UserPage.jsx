@@ -130,12 +130,18 @@ const UserPage = () => {
 
   //para cambiar de página actualizando la URL
   const handlePageChange = (newPage) => {
-    setSearchParams({ page: newPage });
+    setSearchParams((prev) => {
+      prev.set('page', newPage);
+      return prev;
+    });
   };
 
   const handleLimitChange = (newLimit) => {
-    //al cambiar el límite se resetea a la página 1 para evitar errores
-    setSearchParams({ page: '1', limit: newLimit });
+    setSearchParams((prev) => {
+      prev.set('page', '1'); // Resetear a 1 es correcto
+      prev.set('limit', newLimit);
+      return prev;
+    });
   };
 
   return (
@@ -154,7 +160,7 @@ const UserPage = () => {
           <Button
             variant="outline"
             size="icon"
-            onClick={refresh}
+            onClick={() => setSearchParams({ page: '1', limit: '10' })}
             disabled={loading}
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -267,13 +273,11 @@ const UserPage = () => {
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                onClick={() =>
-                  currentPage > 1 &&
-                  setSearchParams({
-                    page: currentPage - 1,
-                    limit: currentLimit,
-                  })
-                }
+                onClick={() => {
+                  if (currentPage > 1) {
+                    handlePageChange(currentPage - 1);
+                  }
+                }}
                 className={
                   currentPage === 1
                     ? 'pointer-events-none opacity-50'
@@ -295,13 +299,11 @@ const UserPage = () => {
 
             <PaginationItem>
               <PaginationNext
-                onClick={() =>
-                  currentPage < totalPages &&
-                  setSearchParams({
-                    page: currentPage + 1,
-                    limit: currentLimit,
-                  })
-                }
+                onClick={() => {
+                  if (currentPage < totalPages) {
+                    handlePageChange(currentPage + 1);
+                  }
+                }}
                 className={
                   currentPage === totalPages
                     ? 'pointer-events-none opacity-50'
