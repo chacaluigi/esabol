@@ -7,6 +7,38 @@
     <title>client</title>
   </head>
   <body>
+    <!-- Spinner loader de carga mientras el navegador renderiza toda la app web-->
+    <div id="loader-container">
+      <div class="spinner"></div>
+      <style>
+        #loader-container {
+          position: fixed;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: white;
+          z-index: 9999;
+        }
+        .spinner {
+          width: 40px;
+          height: 40px;
+          border: 4px solid #f3f3f3;
+          border-top: 4px solid #3b82f6;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      </style>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

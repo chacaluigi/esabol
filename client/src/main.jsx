@@ -8,3 +8,9 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 );
+
+//cuando termine el renderizado se elimina el loader del DOM
+const loader = document.getElementById('loader-container');
+if (loader) {
+  loader.remove();
+}
