@@ -2,7 +2,7 @@ import { DatabaseError } from 'sequelize';
 
 export const errorHandler = (err, req, res, next) => {
   console.error('ERROR LOG: ', err.name);
-  console.error(err);
+  //console.error(err);
 
   // manejo de errores de validacion, en caso que falten datos
   if (err.name === 'SequelizeValidationError') {

@@ -15,7 +15,7 @@ export const updateUser = async (id, userData) => {
   return response.data;
 };
 
-export const deteleUser = async (id) => {
+export const deleteUser = async (id) => {
   const response = await api.delete(`/users/${id}`);
   return response.data;
 };

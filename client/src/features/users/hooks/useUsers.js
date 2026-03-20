@@ -58,12 +58,15 @@ export const useUsers = () => {
   };
 
   const handleDelete = async (id) => {
+    setLoading(true);
     try {
       await userService.deleteUser(id);
       removeUserFromList(id);
       return { success: true };
     } catch (err) {
       return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
     }
   };
 

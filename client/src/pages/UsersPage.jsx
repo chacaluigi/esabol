@@ -43,6 +43,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { UserDeleteDialog } from '@/features/users/components/UserDeleteDialog';
 
 const UsersPage = () => {
   const {
@@ -82,9 +83,10 @@ const UsersPage = () => {
     });
   };
 
-  const handleResetAndRefresh = () => {
+  const handleResetAndRefresh = async () => {
     //cuando se cambia la URL el useEffect detectará el cambio y ejecutará el refresh(1,10) automáticamente
     setSearchParams({ page: '1', limit: '10' });
+    await refresh();
   };
   //hasta aca la PAGINACIÓN
 
@@ -121,7 +123,7 @@ const UsersPage = () => {
     }
 
     if (result?.success) {
-      handleResetAndRefresh();
+      await refresh(currentPage, currentLimit);
       setModalConfig((prev) => ({ ...prev, open: false }));
       //toast para mostrar mensaje de éxito
       toast.success(
@@ -130,21 +132,30 @@ const UsersPage = () => {
           : 'Datos actualizados con éxito',
       );
     } else {
-      //alert('Error: ' + result.error);
-      //notificacion de error
       toast.error('Ocurrió un problema: ' + result.error);
     }
   };
 
   // para manejar la eliminación
-  const handleDelete = async (id) => {
-    if (window.confirm('¿Estás seguro de eliminar este usuario?')) {
-      const result = await deleteUser(id);
-      if (result.success) {
-        toast.success('Usuario eliminado');
-      } else {
-        toast.error('No se pudo eliminar al usuario');
-      }
+  const [deleteConfig, setDeleteConfig] = useState({
+    open: false,
+    userId: null,
+  });
+
+  const openDeleteConfirm = (id) => {
+    setDeleteConfig({ open: true, userId: id });
+  };
+
+  const handleConfirmDelete = async () => {
+    const result = await deleteUser(deleteConfig.userId);
+
+    if (result.success) {
+      toast.success('Usuario eliminado correctamente');
+      setDeleteConfig({ open: false, userId: null });
+      // No necesitas llamar a handleResetAndRefresh() si tu store
+      // ya actualiza la lista localmente con removeUserFromList(id)
+    } else {
+      toast.error('Error: ' + result.error);
     }
   };
 
@@ -236,8 +247,8 @@ const UsersPage = () => {
                           Editar
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          className="text-red-600 focus:text-red-700"
-                          onClick={() => handleDelete(user.id)}
+                          className="text-red-600 cursor-pointer"
+                          onClick={() => openDeleteConfirm(user.id)}
                         >
                           <Trash2 className="mr-2 h-4 w-4" /> Eliminar
                         </DropdownMenuItem>
@@ -320,6 +331,14 @@ const UsersPage = () => {
           </PaginationContent>
         </Pagination>
       </div>
+
+      {/* para el dialogo de confirmaciónd e eliminación */}
+      <UserDeleteDialog
+        open={deleteConfig.open}
+        onOpenChange={(open) => setDeleteConfig((prev) => ({ ...prev, open }))}
+        onConfirm={handleConfirmDelete}
+        isLoading={loading}
+      />
 
       {/* modal único controlado por estado */}
       <UserFormModal
