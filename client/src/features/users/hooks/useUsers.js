@@ -17,10 +17,10 @@ export const useUsers = () => {
     removeUserFromList,
   } = useUserStore();
 
-  const fetchUsers = async (page = 1) => {
+  const fetchUsers = async (page = 1, limit = 10) => {
     setLoading(true);
     try {
-      const response = await userService.getAllUsers(page);
+      const response = await userService.getAllUsers(page, limit);
       //console.log(response);
       setUsers(response.users);
       setTotalPages(response.totalPages);

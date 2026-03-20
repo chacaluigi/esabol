@@ -2,7 +2,7 @@ import { Role, Task, User } from '../models/index.js';
 
 export const getUsers = async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
+  const limit = Math.min(parseInt(req.query.limit) || 10, 100);
   const offset = (page - 1) * limit;
 
   try {

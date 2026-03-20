@@ -36,6 +36,13 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import { useSearchParams } from 'react-router-dom';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const UserPage = () => {
   const {
@@ -47,6 +54,7 @@ const UserPage = () => {
     deleteUser,
     totalPages,
   } = useUsers();
+
   const [modalConfig, setModalConfig] = useState({
     open: false,
     user: null,
@@ -113,15 +121,21 @@ const UserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const currentPage = parseInt(searchParams.get('page')) || 1;
+  const currentLimit = searchParams.get('limit') || '10';
 
-  // Cada vez que la página en la URL cambie, disparamos la petición al API
+  //cada vez que la página en la URL se cambie disparamos la petición al API
   useEffect(() => {
-    refresh(currentPage);
-  }, [currentPage]);
+    refresh(currentPage, currentLimit);
+  }, [currentPage, currentLimit]);
 
-  // Función para cambiar de página actualizando la URL
+  //para cambiar de página actualizando la URL
   const handlePageChange = (newPage) => {
     setSearchParams({ page: newPage });
+  };
+
+  const handleLimitChange = (newLimit) => {
+    //al cambiar el límite se resetea a la página 1 para evitar errores
+    setSearchParams({ page: '1', limit: newLimit });
   };
 
   return (
@@ -232,46 +246,72 @@ const UserPage = () => {
       </div>
 
       {/*para la paginación */}
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              onClick={() =>
-                currentPage > 1 && handlePageChange(currentPage - 1)
-              }
-              className={
-                currentPage === 1
-                  ? 'pointer-events-none opacity-50'
-                  : 'cursor-pointer'
-              }
-            />
-          </PaginationItem>
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
+        <div className="flex items-center gap-2 text-sm text-slate-500">
+          <span>Mostrar</span>
+          <Select value={currentLimit} onValueChange={handleLimitChange}>
+            <SelectTrigger className="w-[70px] h-8">
+              <SelectValue placeholder={currentLimit} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="5">5</SelectItem>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+              <SelectItem value="50">50</SelectItem>
+            </SelectContent>
+          </Select>
+          <span>filas por página</span>
+        </div>
 
-          {[...Array(totalPages)].map((_, i) => (
-            <PaginationItem key={i} className="cursor-pointer">
-              <PaginationLink
-                isActive={currentPage === i + 1}
-                onClick={() => handlePageChange(i + 1)}
-              >
-                {i + 1}
-              </PaginationLink>
+        <Pagination className="justify-end">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() =>
+                  currentPage > 1 &&
+                  setSearchParams({
+                    page: currentPage - 1,
+                    limit: currentLimit,
+                  })
+                }
+                className={
+                  currentPage === 1
+                    ? 'pointer-events-none opacity-50'
+                    : 'cursor-pointer'
+                }
+              />
             </PaginationItem>
-          ))}
 
-          <PaginationItem>
-            <PaginationNext
-              onClick={() =>
-                currentPage < totalPages && handlePageChange(currentPage + 1)
-              }
-              className={
-                currentPage === totalPages
-                  ? 'pointer-events-none opacity-50'
-                  : 'cursor-pointer'
-              }
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+            {[...Array(totalPages)].map((_, i) => (
+              <PaginationItem key={i} className="cursor-pointer">
+                <PaginationLink
+                  isActive={currentPage === i + 1}
+                  onClick={() => handlePageChange(i + 1)}
+                >
+                  {i + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={() =>
+                  currentPage < totalPages &&
+                  setSearchParams({
+                    page: currentPage + 1,
+                    limit: currentLimit,
+                  })
+                }
+                className={
+                  currentPage === totalPages
+                    ? 'pointer-events-none opacity-50'
+                    : 'cursor-pointer'
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
 
       {/* modal único controlado por estado */}
       <UserFormModal
