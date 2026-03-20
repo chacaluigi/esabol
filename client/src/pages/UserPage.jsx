@@ -55,6 +55,39 @@ const UserPage = () => {
     totalPages,
   } = useUsers();
 
+  //para la PAGINACIÓN
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentPage = parseInt(searchParams.get('page')) || 1;
+  const currentLimit = searchParams.get('limit') || '10';
+
+  //cada vez que la página en la URL se cambie se dispara la petición al API
+  useEffect(() => {
+    refresh(currentPage, currentLimit);
+  }, [currentPage, currentLimit]);
+
+  //para cambiar de página actualizando la URL
+  const handlePageChange = (newPage) => {
+    setSearchParams((prev) => {
+      prev.set('page', newPage);
+      return prev;
+    });
+  };
+
+  const handleLimitChange = (newLimit) => {
+    setSearchParams((prev) => {
+      prev.set('page', '1');
+      prev.set('limit', newLimit);
+      return prev;
+    });
+  };
+
+  const handleResetAndRefresh = () => {
+    //cuando se cambia la URL el useEffect detectará el cambio y ejecutará el refresh(1,10) automáticamente
+    setSearchParams({ page: '1', limit: '10' });
+  };
+  //hasta aca la PAGINACIÓN
+
   const [modalConfig, setModalConfig] = useState({
     open: false,
     user: null,
@@ -88,7 +121,7 @@ const UserPage = () => {
     }
 
     if (result?.success) {
-      await refresh();
+      handleResetAndRefresh();
       setModalConfig((prev) => ({ ...prev, open: false }));
       //toast para mostrar mensaje de éxito
       toast.success(
@@ -117,33 +150,6 @@ const UserPage = () => {
 
   const showSkeleton = loading && users.length === 0;
 
-  //para la paginacion
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const currentPage = parseInt(searchParams.get('page')) || 1;
-  const currentLimit = searchParams.get('limit') || '10';
-
-  //cada vez que la página en la URL se cambie disparamos la petición al API
-  useEffect(() => {
-    refresh(currentPage, currentLimit);
-  }, [currentPage, currentLimit]);
-
-  //para cambiar de página actualizando la URL
-  const handlePageChange = (newPage) => {
-    setSearchParams((prev) => {
-      prev.set('page', newPage);
-      return prev;
-    });
-  };
-
-  const handleLimitChange = (newLimit) => {
-    setSearchParams((prev) => {
-      prev.set('page', '1'); // Resetear a 1 es correcto
-      prev.set('limit', newLimit);
-      return prev;
-    });
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -160,7 +166,7 @@ const UserPage = () => {
           <Button
             variant="outline"
             size="icon"
-            onClick={() => setSearchParams({ page: '1', limit: '10' })}
+            onClick={handleResetAndRefresh}
             disabled={loading}
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
