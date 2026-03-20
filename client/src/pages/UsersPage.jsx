@@ -44,7 +44,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const UserPage = () => {
+const UsersPage = () => {
   const {
     users,
     loading,
@@ -334,4 +334,4 @@ const UserPage = () => {
   );
 };
 
-export default UserPage;
+export default UsersPage;
