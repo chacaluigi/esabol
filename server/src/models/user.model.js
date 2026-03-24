@@ -26,12 +26,12 @@ const User = sequelize.define('User', {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: 'user_email_unique',
+    unique: 'users_email_unique',
   },
   username: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: 'user_username_unique',
+    unique: 'users_username_unique',
   },
   status: {
     type: DataTypes.BOOLEAN,
