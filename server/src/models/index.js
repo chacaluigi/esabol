@@ -2,6 +2,7 @@ import { sequelize } from '../config/database.js';
 
 import Role from './role.model.js';
 import Rank from './rank.model.js';
+import Position from './position.model.js';
 import User from './user.model.js';
 import Task from './task.model.js';
 import Team from './team.model.js';
@@ -15,6 +16,9 @@ User.belongsTo(Role, { foreignKey: 'roleId' });
 
 Rank.hasMany(User, { foreignKey: 'rankId' });
 User.belongsTo(Rank, { foreignKey: 'rankId' });
+
+Position.hasMany(User, { foreignKey: 'positionId' });
+User.belongsTo(Position, { foreignKey: 'positionId' });
 
 // RELACIONES PARA USER
 User.hasMany(Task, { foreignKey: 'creatorId' });
@@ -58,6 +62,7 @@ export {
   sequelize,
   Role,
   Rank,
+  Position,
   User,
   Task,
   Team,
