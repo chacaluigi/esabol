@@ -1,7 +1,7 @@
 import { sequelize } from '../config/database.js';
 import { DataTypes } from 'sequelize';
 
-const Especiality = sequelize.define('Especiality', {
+const Speciality = sequelize.define('Speciality', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -13,4 +13,4 @@ const Especiality = sequelize.define('Especiality', {
   },
 });
 
-export default Especiality;
+export default Speciality;
