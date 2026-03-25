@@ -7,11 +7,19 @@ const User = sequelize.define('User', {
     primaryKey: true,
     autoIncrement: true,
   },
+  roleId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   rankId: {
     type: DataTypes.INTEGER,
     //allowNull: false,
   },
   positionId: {
+    type: DataTypes.INTEGER,
+    //allowNull: false,
+  },
+  specialityId: {
     type: DataTypes.INTEGER,
     //allowNull: false,
   },
@@ -37,10 +45,6 @@ const User = sequelize.define('User', {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: true,
-  },
-  roleId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
   },
 });
 
