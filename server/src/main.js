@@ -7,7 +7,7 @@ async function main() {
     await sequelize.authenticate();
     console.log('Successfully Database connection...');
 
-    await sequelize.sync();
+    //await sequelize.sync();
 
     //revisa estado actual de la tabla y añade columnas que faltan sin borrar los datos
     //await sequelize.sync({ alter: true });
