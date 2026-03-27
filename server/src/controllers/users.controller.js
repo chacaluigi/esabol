@@ -1,20 +1,36 @@
+import { Op } from 'sequelize';
 import { Role, Task, User } from '../models/index.js';
 
 export const getUsers = async (req, res, next) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = Math.min(parseInt(req.query.limit) || 10, 100);
+  // const page = parseInt(req.query.page) || 1;
+  // const limit = Math.min(parseInt(req.query.limit) || 10, 100);
+  // const offset = (page - 1) * limit;
+
+  const { page = 1, limit = 10, search = '' } = req.query;
   const offset = (page - 1) * limit;
 
   try {
+
+    const whereCondition = search
+      ? {
+        [Op.or]: [
+          { name: { [Op.iLike]: `%${search}%` } },
+          { email: { [Op.iLike]: `%${search}%` } },
+          { username: { [Op.iLike]: `%${search}%` } }
+        ]
+      }
+      : {};
+
     const { count, rows } = await User.findAndCountAll({
+      where: whereCondition,
       include: [
         {
           model: Role,
           attributes: ['id', 'name'],
         },
       ],
-      limit,
-      offset,
+      limit: parseInt(limit),
+      offset: parseInt(offset),
       order: [
         ['status', 'DESC'],
         ['createdAt', 'DESC'],
@@ -24,10 +40,12 @@ export const getUsers = async (req, res, next) => {
     if (rows.length === 0)
       return res.status(404).json({ msg: 'Users not found' });
 
+    console.log('limit', typeof (limit))
+
     res.json({
       users: rows,
       totalPages: Math.ceil(count / limit),
-      currentPage: page,
+      currentPage: parseInt(page),
       totalItems: count,
     });
   } catch (error) {

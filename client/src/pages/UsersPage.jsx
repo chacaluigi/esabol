@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { UserStatusBadge } from '@/features/users/components/UserStatusBadge';
 import { UserFormModal } from '@/features/users/components/UserFormModal';
 import {
@@ -24,6 +25,7 @@ import {
   Eye,
   Edit,
   Trash2,
+  Search,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { UserTableSkeleton } from '@/features/users/components/UserTableSkeleton';
@@ -44,6 +46,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { UserDeleteDialog } from '@/features/users/components/UserDeleteDialog';
+import { useDebounce } from '@/hooks/useDebounce';
 
 const UsersPage = () => {
   const {
@@ -58,14 +61,27 @@ const UsersPage = () => {
 
   //para la PAGINACIÓN
   const [searchParams, setSearchParams] = useSearchParams();
-
   const currentPage = parseInt(searchParams.get('page')) || 1;
   const currentLimit = searchParams.get('limit') || '10';
 
+  //para la busqueda dinámica de users
+  const search = searchParams.get('search') || '';
+  const debouncedSearch = useDebounce(search, 500);
+
   //cada vez que la página en la URL se cambie se dispara la petición al API
   useEffect(() => {
-    refresh(currentPage, currentLimit);
-  }, [currentPage, currentLimit]);
+    refresh(currentPage, currentLimit, debouncedSearch);
+  }, [currentPage, currentLimit, debouncedSearch]);
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    // Al buscar, reseteamos a la página 1 para evitar errores de paginación
+    setSearchParams({
+      page: 1,
+      limit: searchParams.get('limit') || '10',
+      search: value,
+    });
+  };
 
   //para cambiar de página actualizando la URL
   const handlePageChange = (newPage) => {
@@ -173,7 +189,17 @@ const UsersPage = () => {
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2 flex-1 max-w-md">
+          <div className="relative w-full">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+            <Input
+              placeholder="Buscar por nombre o email..."
+              className="pl-9"
+              value={search}
+              onChange={handleSearch}
+            />
+          </div>
+
           <Button
             variant="outline"
             size="icon"
@@ -182,6 +208,7 @@ const UsersPage = () => {
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </Button>
+
           <Button
             className="bg-blue-600 hover:bg-blue-700"
             onClick={() => openModal(null, 'add')}

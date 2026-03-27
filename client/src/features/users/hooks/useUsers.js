@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useUserStore } from '@/features/users/store/useUserStore';
 import * as userService from '@/services/userService';
 
@@ -17,10 +16,10 @@ export const useUsers = () => {
     removeUserFromList,
   } = useUserStore();
 
-  const fetchUsers = async (page = 1, limit = 10) => {
+  const fetchUsers = async (page = 1, limit = 10, debouncedSearch = '') => {
     setLoading(true);
     try {
-      const response = await userService.getAllUsers(page, limit);
+      const response = await userService.getAllUsers(page, limit, debouncedSearch);
       //console.log(response);
       setUsers(response.users);
       setTotalPages(response.totalPages);
