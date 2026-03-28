@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useRoleStore } from '../store/useRoleStore';
 
 import { Button } from '@/components/ui/button';
@@ -30,11 +29,7 @@ export function UserFormModal({
   isLoading,
 }) {
   const isReadOnly = mode === 'view';
-  const { roles, fetchRoles } = useRoleStore();
-
-  useEffect(() => {
-    if (open) fetchRoles();
-  }, [open, fetchRoles]);
+  const { roles, loading: rolesLoading } = useRoleStore();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -108,7 +103,11 @@ export function UserFormModal({
                 required
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecciona un rol" />
+                  <SelectValue
+                    placeholder={
+                      rolesLoading ? 'Cargando roles...' : 'Selecciona un rol'
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {roles.map((role) => (

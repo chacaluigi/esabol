@@ -47,8 +47,10 @@ import {
 } from '@/components/ui/select';
 import { UserDeleteDialog } from '@/features/users/components/UserDeleteDialog';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useRoles } from '@/features/users/hooks/useRoles';
 
 const UsersPage = () => {
+  const { roles } = useRoles();
   const {
     users,
     loading,

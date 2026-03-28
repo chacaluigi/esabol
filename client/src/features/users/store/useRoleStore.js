@@ -6,7 +6,7 @@ export const useRoleStore = create((set, get) => ({
   loading: false,
 
   fetchRoles: async () => {
-    // Si ya tenemos roles, no volvemos a llamar a la API
+    //si ya tenemos a los roles no volvemos a llamar a la API
     if (get().roles.length > 0) return;
 
     set({ loading: true });
