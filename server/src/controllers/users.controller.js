@@ -2,10 +2,6 @@ import { Op } from 'sequelize';
 import { Role, Task, User } from '../models/index.js';
 
 export const getUsers = async (req, res, next) => {
-  // const page = parseInt(req.query.page) || 1;
-  // const limit = Math.min(parseInt(req.query.limit) || 10, 100);
-  // const offset = (page - 1) * limit;
-
   const { page = 1, limit = 10, search = '' } = req.query;
   const offset = (page - 1) * limit;
 
@@ -16,7 +12,7 @@ export const getUsers = async (req, res, next) => {
         [Op.or]: [
           { name: { [Op.iLike]: `%${search}%` } },
           { email: { [Op.iLike]: `%${search}%` } },
-          { username: { [Op.iLike]: `%${search}%` } }
+          //{ username: { [Op.iLike]: `%${search}%` } }
         ]
       }
       : {};
