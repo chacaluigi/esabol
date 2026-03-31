@@ -78,7 +78,7 @@ const UsersPage = () => {
 
   const handleSearch = (e) => {
     const value = e.target.value;
-    // Al buscar, reseteamos a la página 1 para evitar errores de paginación
+    // Al buscar reseteamos a la página 1 para evitar errores de paginación
     setSearchParams({
       page: 1,
       limit: searchParams.get('limit') || '10',

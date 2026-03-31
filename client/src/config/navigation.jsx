@@ -1,6 +1,7 @@
 import {
   Home,
   User,
+  ClipboardList,
   MapPin,
   MessageSquare,
   Star,
@@ -9,6 +10,7 @@ import {
 } from 'lucide-react';
 import DashboardPage from '@/pages/DashboardPage';
 import UsersPage from '@/pages/UsersPage';
+import TaskBoardPage from '@/pages/TaskBoardPage';
 
 export const navConfig = {
   mainNav: [
@@ -23,6 +25,12 @@ export const navConfig = {
       href: '/users',
       icon: User,
       component: UsersPage,
+    },
+    {
+      title: 'Tareas',
+      href: '/tasks',
+      icon: ClipboardList,
+      component: TaskBoardPage,
     },
     {
       title: 'Location',
