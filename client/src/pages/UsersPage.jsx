@@ -48,6 +48,7 @@ import {
 import { UserDeleteDialog } from '@/features/users/components/UserDeleteDialog';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useRoles } from '@/features/users/hooks/useRoles';
+import { UserRoleBadge } from '@/features/users/components/UserRoleBadge';
 
 const UsersPage = () => {
   const { roles } = useRoles();
@@ -246,11 +247,13 @@ const UsersPage = () => {
                   <TableCell className="font-medium">{user.name}</TableCell>
                   <TableCell className="text-slate-500">{user.email}</TableCell>
                   <TableCell className="font-medium">
-                    <div>
-                      <p className="text-xs text-slate-400 font-normal">
-                        {user.Role?.name || 'Sin rol'}{' '}
-                      </p>
-                    </div>
+                    {user.Role ? (
+                      <UserRoleBadge roleName={user.Role.name} />
+                    ) : (
+                      <span className="text-xs text-slate-400 italic">
+                        Sin rol
+                      </span>
+                    )}
                   </TableCell>
                   <TableCell>
                     <UserStatusBadge status={user.status} />
