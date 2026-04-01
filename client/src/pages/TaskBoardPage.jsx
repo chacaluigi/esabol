@@ -24,7 +24,7 @@ const TaskBoardPage = () => {
     setModalConfig({ open: true, task, mode: 'edit' });
   };
 
-  const handleOpenAddModal = (initialStatus = 'To do') => {
+  const handleOpenAddModal = (initialStatus = 'TO_DO') => {
     setModalConfig({
       open: true,
       task: { status: initialStatus },

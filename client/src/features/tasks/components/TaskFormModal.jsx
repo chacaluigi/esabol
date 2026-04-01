@@ -103,22 +103,22 @@ export function TaskFormModal({
                 <Label>Prioridad</Label>
                 <Select
                   name="priority"
-                  defaultValue={task?.priority || 'Medium'}
+                  defaultValue={task?.priority || 'Media'}
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Low">Baja</SelectItem>
-                    <SelectItem value="Medium">Media</SelectItem>
-                    <SelectItem value="High">Alta</SelectItem>
+                    <SelectItem value="Baja">Baja</SelectItem>
+                    <SelectItem value="Media">Media</SelectItem>
+                    <SelectItem value="Alta">Alta</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="grid gap-2">
                 <Label>Estado</Label>
-                <Select name="status" defaultValue={task?.status || 'To do'}>
+                <Select name="status" defaultValue={task?.status || 'TO_DO'}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

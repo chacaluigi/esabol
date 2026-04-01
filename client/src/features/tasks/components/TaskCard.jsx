@@ -12,9 +12,9 @@ export function TaskCard({ task, onEdit }) {
   };
 
   const priorityColors = {
-    High: 'bg-red-100 text-red-700 border-red-200',
-    Medium: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-    Low: 'bg-green-100 text-green-700 border-green-200',
+    Alta: 'bg-red-100 text-red-700 border-red-200',
+    Media: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+    Baja: 'bg-green-100 text-green-700 border-green-200',
   };
 
   return (
