@@ -26,12 +26,12 @@ const Task = sequelize.define('Task', {
   },
   priority: {
     type: DataTypes.STRING,
-    defaultValue: 'Medium',
+    defaultValue: 'Media',
     allowNull: false,
   },
   status: {
     type: DataTypes.STRING,
-    defaultValue: 'To do',
+    defaultValue: 'TO_DO',
     allowNull: false,
   },
   estimatedDays: {
