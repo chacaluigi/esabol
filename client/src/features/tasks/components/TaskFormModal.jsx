@@ -123,9 +123,9 @@ export function TaskFormModal({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="To do">Por Hacer</SelectItem>
-                    <SelectItem value="Doing">En Progreso</SelectItem>
-                    <SelectItem value="Done">Completada</SelectItem>
+                    <SelectItem value="TO_DO">Por Hacer</SelectItem>
+                    <SelectItem value="DOING">En Progreso</SelectItem>
+                    <SelectItem value="DONE">Completada</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
