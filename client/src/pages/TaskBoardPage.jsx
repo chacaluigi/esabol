@@ -3,21 +3,52 @@ import { TaskColumn } from '@/features/tasks/components/TaskColumn';
 import { Button } from '@/components/ui/button';
 import { Plus, RefreshCw } from 'lucide-react';
 import { Spinner } from '@/components/ui/spinner';
+import { useState } from 'react';
+import { TaskFormModal } from '@/features/tasks/components/TaskFormModal';
+import { toast } from 'sonner';
 
 const TaskBoardPage = () => {
-  const { tasks, loading, refresh, moveTask } = useTasks();
+  const { tasks, loading, addTask, updateTask, refresh, moveTask } = useTasks();
 
   const todoTasks = tasks.filter((t) => t.status === 'TO_DO');
   const doingTasks = tasks.filter((t) => t.status === 'DOING');
   const doneTasks = tasks.filter((t) => t.status === 'DONE');
 
+  const [modalConfig, setModalConfig] = useState({
+    open: false,
+    task: null,
+    mode: 'add',
+  });
+
   const handleEditTask = (task) => {
-    //para abrir TaskFormModal
-    console.log('Editar tarea:', task);
+    setModalConfig({ open: true, task, mode: 'edit' });
   };
 
-  const handleOpenAddModal = () => {
-    //para abrir el modal en modo add
+  const handleOpenAddModal = (initialStatus = 'To do') => {
+    setModalConfig({
+      open: true,
+      task: { status: initialStatus },
+      mode: 'add',
+    });
+  };
+
+  const onSave = async (data) => {
+    let result;
+    if (modalConfig.mode === 'add') {
+      // Importante: Asegurarse de enviar creatorId
+      result = await addTask({ ...data, creatorId: 36 });
+    } else {
+      result = await updateTask(modalConfig.task.id, data);
+    }
+
+    if (result.success) {
+      toast.success(
+        modalConfig.mode === 'add' ? 'Tarea creada' : 'Tarea actualizada',
+      );
+      setModalConfig((prev) => ({ ...prev, open: false }));
+    } else {
+      toast.error(result.error);
+    }
   };
 
   return (
@@ -62,6 +93,7 @@ const TaskBoardPage = () => {
           tasks={todoTasks}
           onMoveTask={moveTask}
           onEditTask={handleEditTask}
+          onAddTask={handleOpenAddModal}
         />
         <TaskColumn
           title="En Progreso"
@@ -69,6 +101,7 @@ const TaskBoardPage = () => {
           tasks={doingTasks}
           onMoveTask={moveTask}
           onEditTask={handleEditTask}
+          onAddTask={handleOpenAddModal}
         />
         <TaskColumn
           title="Completadas"
@@ -76,10 +109,18 @@ const TaskBoardPage = () => {
           tasks={doneTasks}
           onMoveTask={moveTask}
           onEditTask={handleEditTask}
+          onAddTask={handleOpenAddModal}
         />
       </div>
 
-      {/* TaskFormModal irá aquí */}
+      <TaskFormModal
+        open={modalConfig.open}
+        onOpenChange={(open) => setModalConfig((prev) => ({ ...prev, open }))}
+        task={modalConfig.task}
+        mode={modalConfig.mode}
+        onSave={onSave}
+        isLoading={loading}
+      />
     </div>
   );
 };

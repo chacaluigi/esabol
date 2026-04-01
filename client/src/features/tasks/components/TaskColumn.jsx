@@ -1,6 +1,15 @@
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { TaskCard } from './TaskCard';
 
-export function TaskColumn({ title, status, tasks, onMoveTask, onEditTask }) {
+export function TaskColumn({
+  title,
+  status,
+  tasks,
+  onMoveTask,
+  onEditTask,
+  onAddTask,
+}) {
   const handleDragOver = (e) => {
     e.preventDefault();
     e.currentTarget.classList.add('bg-slate-200/50');
@@ -39,13 +48,22 @@ export function TaskColumn({ title, status, tasks, onMoveTask, onEditTask }) {
           <TaskCard key={task.id} task={task} onEdit={onEditTask} />
         ))}
 
-        {/* Zona vacía si no hay tareas para facilitar el drop */}
+        {/* zona vacía que aparece cuando no hay tareas para facilitar el drop */}
         {tasks.length === 0 && (
           <div className="h-24 border-2 border-dashed border-slate-300 rounded-lg flex items-center justify-center text-sm text-slate-400">
             Suelta una tarea aquí
           </div>
         )}
       </div>
+
+      <Button
+        variant="ghost"
+        className="mt-3 w-full justify-start text-slate-500 hover:text-slate-900 hover:bg-slate-200"
+        onClick={() => onAddTask(status)}
+      >
+        <Plus className="w-4 h-4 mr-2" />
+        Añadir tarea
+      </Button>
     </div>
   );
 }
