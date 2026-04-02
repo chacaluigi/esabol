@@ -24,6 +24,18 @@ User.belongsTo(Position, { foreignKey: 'positionId' });
 Speciality.hasMany(User, { foreignKey: 'specialityId' });
 User.belongsTo(Speciality, { foreignKey: 'specialityId' });
 
+Task.belongsToMany(User, {
+  through: TaskAssignee,
+  as: 'assignees',
+  foreignKey: 'taskId'
+});
+
+User.belongsToMany(Task, {
+  through: TaskAssignee,
+  as: 'tasks',
+  foreignKey: 'userId'
+});
+
 // RELACIONES PARA USER
 User.hasMany(Task, { foreignKey: 'creatorId' });
 Task.belongsTo(User, { foreignKey: 'creatorId' });
