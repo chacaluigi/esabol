@@ -125,7 +125,7 @@ export function TaskFormModal({
                   <SelectContent>
                     <SelectItem value="TO_DO">Por Hacer</SelectItem>
                     <SelectItem value="DOING">En Progreso</SelectItem>
-                    <SelectItem value="DONE">Completada</SelectItem>
+                    <SelectItem value="DONE">Completadas</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
