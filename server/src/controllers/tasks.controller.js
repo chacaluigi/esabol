@@ -1,11 +1,28 @@
-import { Task } from '../models/index.js';
+import { Task, User } from '../models/index.js';
 
 export const createTask = async (req, res, next) => {
   try {
-    const task = await Task.create(req.body);
+    const { assigneeUserIds, ...data } = req.body;
+    const task = await Task.create(data);
+
     if (!task)
       return res.status(404).json({ msg: 'Task have not been created' });
-    res.status(201).json(task);
+
+    if (assigneeUserIds && assigneeUserIds.length > 0) {
+      await task.setAssignees(assigneeUserIds);
+    }
+
+    const taskWithAssignees = await Task.findByPk(task.id, {
+      include: [
+        {
+          model: User,
+          as: 'assignees',
+          attributes: ['id', 'name']
+        }
+      ]
+    });
+
+    res.status(201).json(taskWithAssignees);
   } catch (error) {
     next(error);
   }
@@ -13,7 +30,15 @@ export const createTask = async (req, res, next) => {
 
 export const getTasks = async (req, res, next) => {
   try {
-    const tasks = await Task.findAll();
+    const tasks = await Task.findAll({
+      include: [
+        {
+          model: User,
+          as: 'assignees',
+          attributes: ['id', 'name']
+        }
+      ]
+    });
     if (tasks.length === 0)
       return res.status(404).json({ msg: 'Tasks not found' });
     res.status(200).json(tasks);
@@ -38,17 +63,28 @@ export const getTask = async (req, res, next) => {
 export const updateTask = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const data = req.body;
+    const { assigneeUserIds, ...data } = req.body;
     const task = await Task.findByPk(id);
 
     if (!task) return res.status(404).json({ msg: 'Task not found to update' });
+    await task.update(data);
 
-    task.set(data);
-    await task.save();
+    if (assigneeUserIds) {
+      await task.setAssignees(assigneeUserIds);
+    }
 
-    res.status(200).json(task);
+    const updatedTask = await Task.findByPk(id, {
+      include: [
+        {
+          model: User,
+          as: 'assignees',
+          attributes: ['id', 'name']
+        }
+      ]
+    });
+
+    res.status(200).json(updatedTask);
   } catch (error) {
-    //console.error(error);
     next(error);
   }
 };
