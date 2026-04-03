@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, AlignLeft } from 'lucide-react';
 
@@ -43,12 +44,32 @@ export function TaskCard({ task, onEdit }) {
         <AlignLeft className="w-4 h-4 text-slate-400 mb-3" />
       )}
 
-      {task.dueDate && (
-        <div className="flex items-center text-xs text-slate-500 mt-3 pt-3 border-t border-slate-50">
-          <Calendar className="w-3 h-3 mr-1" />
-          {new Date(task.dueDate).toLocaleDateString()}
+      {/* para la fecha y los avatares */}
+      <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-50">
+        <div className="flex items-center text-xs text-slate-500">
+          {task.dueDate && (
+            <>
+              <Calendar className="w-3 h-3 mr-1" />
+              {new Date(task.dueDate).toLocaleDateString()}
+            </>
+          )}
         </div>
-      )}
+
+        {/* avatares solapados */}
+        {task.assignees && task.assignees.length > 0 && (
+          <div className="flex -space-x-2">
+            {task.assignees.map((user) => (
+              <Avatar key={user.id} className="w-6 h-6 border-2 border-white">
+                {/* Opcional: con URLs de fotos de perfil, usar 
+                <AvatarImage src={user.photoUrl} /> */}
+                <AvatarFallback className="text-[10px] bg-blue-100 text-blue-700">
+                  {user.name.substring(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

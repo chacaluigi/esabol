@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
@@ -29,6 +29,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
+import { Badge } from '@/components/ui/badge';
+import { useUsers } from '@/features/users/hooks/useUsers';
 
 export function TaskFormModal({
   open,
@@ -40,11 +42,23 @@ export function TaskFormModal({
 }) {
   const [date, setDate] = useState(null);
 
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const { users } = useUsers();
+
   useEffect(() => {
     if (open) {
       setDate(task?.dueDate ? new Date(task.dueDate) : null);
+      setSelectedUsers(task?.assignees?.map((u) => u.id.toString()) || []);
     }
   }, [open, task]);
+
+  const toggleUser = (userId) => {
+    setSelectedUsers((prev) =>
+      prev.includes(userId)
+        ? prev.filter((id) => id !== userId)
+        : [...prev, userId],
+    );
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -57,7 +71,8 @@ export function TaskFormModal({
       dueDate: date ? date.toISOString() : null,
       // creatorId y assigneeId se manejan aka segun el auth/users
       creatorId: 36,
-      assigneeUserId: 23,
+      //assigneeUserId: 23,
+      assigneeUserIds: selectedUsers,
     };
     onSave(data);
   };
@@ -129,6 +144,70 @@ export function TaskFormModal({
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+
+            {/* añadir usuarios a la tarea */}
+            <div className="grid gap-2">
+              <Label>Miembros Asignados</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    role="combobox"
+                    className="w-full justify-between h-auto min-h-10 py-2"
+                  >
+                    {selectedUsers.length > 0 ? (
+                      <div className="flex flex-wrap gap-1">
+                        {selectedUsers.map((id) => {
+                          const user = users.find(
+                            (u) => u.id.toString() === id,
+                          );
+                          return user ? (
+                            <Badge
+                              variant="secondary"
+                              key={id}
+                              className="text-xs"
+                            >
+                              {user.name.split(' ')[0]}{' '}
+                            </Badge>
+                          ) : null;
+                        })}
+                      </div>
+                    ) : (
+                      <span className="text-muted-foreground font-normal">
+                        Seleccionar miembros...
+                      </span>
+                    )}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[450px] p-2" align="start">
+                  <div className="max-h-60 overflow-y-auto space-y-1">
+                    {users.map((user) => {
+                      const isSelected = selectedUsers.includes(
+                        user.id.toString(),
+                      );
+                      return (
+                        <div
+                          key={user.id}
+                          onClick={() => toggleUser(user.id.toString())}
+                          className={cn(
+                            'flex items-center justify-between px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-slate-100',
+                            isSelected &&
+                              'bg-slate-50 text-blue-600 font-medium',
+                          )}
+                        >
+                          <span>{user.name}</span>
+                          {isSelected && (
+                            <Check className="h-4 w-4 text-blue-600" />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
 
             <div className="grid gap-2">
