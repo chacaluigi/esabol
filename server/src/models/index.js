@@ -14,7 +14,7 @@ import WorkdayType from './workday-type.model.js';
 import TaskAssignee from './task-assignees.model.js';
 
 Role.hasMany(User, { foreignKey: 'roleId' });
-User.belongsTo(Role, { foreignKey: 'roleId' });
+User.belongsTo(Role, { foreignKey: 'roleId', as: 'roles' });
 
 Rank.hasMany(User, { foreignKey: 'rankId' });
 User.belongsTo(Rank, { foreignKey: 'rankId' });

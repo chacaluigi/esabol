@@ -22,6 +22,7 @@ export const getUsers = async (req, res, next) => {
       include: [
         {
           model: Role,
+          as: 'roles',
           attributes: ['id', 'name'],
         },
       ],

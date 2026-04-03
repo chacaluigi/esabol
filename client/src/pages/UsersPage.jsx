@@ -236,7 +236,7 @@ const UsersPage = () => {
           </TableHeader>
 
           {showSkeleton ? (
-            <UserTableSkeleton rows={5} /> // cantidad de filas skeleton para colocar
+            <UserTableSkeleton rows={10} />
           ) : (
             <TableBody>
               {users.map((user) => (
@@ -247,8 +247,8 @@ const UsersPage = () => {
                   <TableCell className="font-medium">{user.name}</TableCell>
                   <TableCell className="text-slate-500">{user.email}</TableCell>
                   <TableCell className="font-medium">
-                    {user.Role ? (
-                      <UserRoleBadge roleName={user.Role.name} />
+                    {user.roles ? (
+                      <UserRoleBadge roleName={user.roles.name} />
                     ) : (
                       <span className="text-xs text-slate-400 italic">
                         Sin rol
