@@ -31,6 +31,7 @@ import {
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import { Badge } from '@/components/ui/badge';
 import { useUsers } from '@/features/users/hooks/useUsers';
+import { useDebounce } from '@/hooks/useDebounce';
 
 export function TaskFormModal({
   open,
@@ -41,23 +42,47 @@ export function TaskFormModal({
   isLoading,
 }) {
   const [date, setDate] = useState(null);
-
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const { users } = useUsers();
 
+  //estados para la búsqueda local
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearch = useDebounce(searchTerm, 500);
+
+  const { users, refresh, loading: isUsersLoading } = useUsers();
+
+  //useEffect para disparar la búsqueda cuando cambie el texto
+  useEffect(() => {
+    if (open) {
+      refresh(1, 10, debouncedSearch);
+    }
+  }, [debouncedSearch, open]);
+
+  //useEffect para setear la data inicial
   useEffect(() => {
     if (open) {
       setDate(task?.dueDate ? new Date(task.dueDate) : null);
-      setSelectedUsers(task?.assignees?.map((u) => u.id.toString()) || []);
+      setSelectedUsers(
+        task?.assignees?.map((u) => ({
+          id: u.id.toString(),
+          name: u.name,
+        })) || [],
+      );
+      setSearchTerm('');
     }
   }, [open, task]);
 
-  const toggleUser = (userId) => {
-    setSelectedUsers((prev) =>
-      prev.includes(userId)
-        ? prev.filter((id) => id !== userId)
-        : [...prev, userId],
-    );
+  const toggleUser = (userToToggle) => {
+    setSelectedUsers((prev) => {
+      const exists = prev.some((u) => u.id === userToToggle.id.toString());
+      if (exists) {
+        return prev.filter((u) => u.id !== userToToggle.id.toString());
+      } else {
+        return [
+          ...prev,
+          { id: userToToggle.id.toString(), name: userToToggle.name },
+        ];
+      }
+    });
   };
 
   const handleSubmit = (e) => {
@@ -72,7 +97,7 @@ export function TaskFormModal({
       // creatorId y assigneeId se manejan aka segun el auth/users
       creatorId: 36,
       //assigneeUserId: 23,
-      assigneeUserIds: selectedUsers,
+      assigneeUserIds: selectedUsers.map((u) => u.id),
     };
     onSave(data);
   };
@@ -159,20 +184,16 @@ export function TaskFormModal({
                   >
                     {selectedUsers.length > 0 ? (
                       <div className="flex flex-wrap gap-1">
-                        {selectedUsers.map((id) => {
-                          const user = users.find(
-                            (u) => u.id.toString() === id,
-                          );
-                          return user ? (
-                            <Badge
-                              variant="secondary"
-                              key={id}
-                              className="text-xs"
-                            >
-                              {user.name.split(' ')[0]}{' '}
-                            </Badge>
-                          ) : null;
-                        })}
+                        {/* 5. Renderizamos directamente desde selectedUsers */}
+                        {selectedUsers.map((user) => (
+                          <Badge
+                            variant="secondary"
+                            key={user.id}
+                            className="text-xs"
+                          >
+                            {user.name.split(' ')[0]}
+                          </Badge>
+                        ))}
                       </div>
                     ) : (
                       <span className="text-muted-foreground font-normal">
@@ -182,29 +203,49 @@ export function TaskFormModal({
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[450px] p-2" align="start">
-                  <div className="max-h-60 overflow-y-auto space-y-1">
-                    {users.map((user) => {
-                      const isSelected = selectedUsers.includes(
-                        user.id.toString(),
-                      );
-                      return (
-                        <div
-                          key={user.id}
-                          onClick={() => toggleUser(user.id.toString())}
-                          className={cn(
-                            'flex items-center justify-between px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-slate-100',
-                            isSelected &&
-                              'bg-slate-50 text-blue-600 font-medium',
-                          )}
-                        >
-                          <span>{user.name}</span>
-                          {isSelected && (
-                            <Check className="h-4 w-4 text-blue-600" />
-                          )}
-                        </div>
-                      );
-                    })}
+                <PopoverContent className="w-[450px] p-0" align="start">
+                  {/* 6. CAJA DE BÚSQUEDA DENTRO DEL POPOVER */}
+                  <div className="p-2 border-b">
+                    <Input
+                      placeholder="Buscar usuario por nombre o correo..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="h-8"
+                    />
+                  </div>
+
+                  <div className="max-h-60 overflow-y-auto p-2 space-y-1">
+                    {isUsersLoading ? (
+                      <div className="text-sm text-center py-2 text-muted-foreground">
+                        Buscando...
+                      </div>
+                    ) : users.length === 0 ? (
+                      <div className="text-sm text-center py-2 text-muted-foreground">
+                        No se encontraron usuarios.
+                      </div>
+                    ) : (
+                      users.map((user) => {
+                        const isSelected = selectedUsers.some(
+                          (su) => su.id === user.id.toString(),
+                        );
+                        return (
+                          <div
+                            key={user.id}
+                            onClick={() => toggleUser(user)}
+                            className={cn(
+                              'flex items-center justify-between px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-slate-100',
+                              isSelected &&
+                                'bg-slate-50 text-blue-600 font-medium',
+                            )}
+                          >
+                            <span>{user.name}</span>
+                            {isSelected && (
+                              <Check className="h-4 w-4 text-blue-600" />
+                            )}
+                          </div>
+                        );
+                      })
+                    )}
                   </div>
                 </PopoverContent>
               </Popover>

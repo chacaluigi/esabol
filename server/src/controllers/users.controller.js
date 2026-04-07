@@ -34,8 +34,8 @@ export const getUsers = async (req, res, next) => {
       ],
     });
 
-    if (rows.length === 0)
-      return res.status(404).json({ msg: 'Users not found' });
+    // if (rows.length === 0)
+    //   return res.status(404).json({ msg: 'Users not found' });
 
     console.log('limit', typeof (limit))
 

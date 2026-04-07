@@ -20,7 +20,6 @@ export const useUsers = () => {
     setLoading(true);
     try {
       const response = await userService.getAllUsers(page, limit, debouncedSearch);
-      //console.log(response);
       setUsers(response.users);
       setTotalPages(response.totalPages);
     } catch (err) {
@@ -68,11 +67,6 @@ export const useUsers = () => {
       setLoading(false);
     }
   };
-
-  // useEffect para que solo cargue si la lista está vacía
-  // useEffect(() => {
-  //   if (users.length === 0) fetchUsers();
-  // }, []);
 
   return {
     users,
