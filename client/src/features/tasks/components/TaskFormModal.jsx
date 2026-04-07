@@ -184,7 +184,6 @@ export function TaskFormModal({
                   >
                     {selectedUsers.length > 0 ? (
                       <div className="flex flex-wrap gap-1">
-                        {/* 5. Renderizamos directamente desde selectedUsers */}
                         {selectedUsers.map((user) => (
                           <Badge
                             variant="secondary"
@@ -204,7 +203,6 @@ export function TaskFormModal({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[450px] p-0" align="start">
-                  {/* 6. CAJA DE BÚSQUEDA DENTRO DEL POPOVER */}
                   <div className="p-2 border-b">
                     <Input
                       placeholder="Buscar usuario por nombre o correo..."

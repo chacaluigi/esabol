@@ -70,11 +70,7 @@ const TaskBoardPage = () => {
             onClick={refresh}
             disabled={loading}
           >
-            {loading ? (
-              <Spinner className="w-4 h-4" />
-            ) : (
-              <RefreshCw className="w-4 h-4" />
-            )}
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </Button>
           <Button
             className="bg-blue-600 hover:bg-blue-700"
