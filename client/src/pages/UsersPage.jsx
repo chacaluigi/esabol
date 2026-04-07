@@ -142,9 +142,8 @@ const UsersPage = () => {
     }
 
     if (result?.success) {
-      await refresh(currentPage, currentLimit);
+      //await refresh(currentPage, currentLimit);
       setModalConfig((prev) => ({ ...prev, open: false }));
-      //toast para mostrar mensaje de éxito
       toast.success(
         modalConfig.mode === 'add'
           ? 'Usuario creado correctamente'
@@ -171,8 +170,6 @@ const UsersPage = () => {
     if (result.success) {
       toast.success('Usuario eliminado correctamente');
       setDeleteConfig({ open: false, userId: null });
-      // No necesitas llamar a handleResetAndRefresh() si tu store
-      // ya actualiza la lista localmente con removeUserFromList(id)
     } else {
       toast.error('Error: ' + result.error);
     }

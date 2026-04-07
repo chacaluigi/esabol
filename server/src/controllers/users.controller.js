@@ -64,8 +64,17 @@ export const getUser = async (req, res, next) => {
 
 export const createUser = async (req, res, next) => {
   try {
-    const user = await User.create(req.body);
-    res.status(201).json({ success: true, id: user.id });
+    const newUser = await User.create(req.body);
+    const userWithRoles = await User.findByPk(newUser.id, {
+      include: [
+        {
+          model: Role,
+          as: 'roles',
+          attributes: ['id', 'name']
+        }
+      ]
+    });
+    res.status(201).json(userWithRoles);
   } catch (error) {
     next(error);
   }
@@ -78,9 +87,19 @@ export const updateUser = async (req, res, next) => {
 
     if (!user) return res.status(404).json({ msg: 'User not found' });
 
-    user.set(req.body);
-    await user.save();
-    res.json({ success: true });
+    await user.update(req.body);
+
+    const updatedUser = await User.findByPk(id, {
+      include: [
+        {
+          model: Role,
+          as: 'roles',
+          attributes: ['id', 'name']
+        }
+      ]
+    });
+
+    res.json(updatedUser);
   } catch (error) {
     next(error);
   }
