@@ -8,7 +8,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 const CalendarPage = () => {
-  const { tasks, refresh: fetchTasks } = useTasks();
+  const { tasks, fetchTasks } = useTasks();
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {

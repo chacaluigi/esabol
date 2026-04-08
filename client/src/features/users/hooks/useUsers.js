@@ -72,7 +72,7 @@ export const useUsers = () => {
     users,
     loading,
     error,
-    refresh: fetchUsers,
+    fetchUsers,
     addUser: handleAdd,
     updateUser: handleUpdate,
     deleteUser: handleDelete,

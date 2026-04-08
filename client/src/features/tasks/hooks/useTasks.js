@@ -81,7 +81,7 @@ export const useTasks = () => {
     tasks,
     loading,
     error,
-    refresh: fetchTasks,
+    fetchTasks,
     addTask: handleAdd,
     updateTask: handleUpdate,
     moveTask,

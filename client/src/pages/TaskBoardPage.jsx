@@ -2,13 +2,13 @@ import { useTasks } from '@/features/tasks/hooks/useTasks';
 import { TaskColumn } from '@/features/tasks/components/TaskColumn';
 import { Button } from '@/components/ui/button';
 import { Plus, RefreshCw } from 'lucide-react';
-import { Spinner } from '@/components/ui/spinner';
 import { useState } from 'react';
 import { TaskFormModal } from '@/features/tasks/components/TaskFormModal';
 import { toast } from 'sonner';
 
 const TaskBoardPage = () => {
-  const { tasks, loading, addTask, updateTask, refresh, moveTask } = useTasks();
+  const { tasks, loading, addTask, updateTask, fetchTasks, moveTask } =
+    useTasks();
 
   const todoTasks = tasks.filter((t) => t.status === 'TO_DO');
   const doingTasks = tasks.filter((t) => t.status === 'DOING');
@@ -67,7 +67,7 @@ const TaskBoardPage = () => {
           <Button
             variant="outline"
             size="icon"
-            onClick={refresh}
+            onClick={fetchTasks}
             disabled={loading}
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />

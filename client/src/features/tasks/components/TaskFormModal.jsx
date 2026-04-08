@@ -48,12 +48,12 @@ export function TaskFormModal({
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearch = useDebounce(searchTerm, 500);
 
-  const { users, refresh, loading: isUsersLoading } = useUsers();
+  const { users, fetchUsers, loading: isUsersLoading } = useUsers();
 
   //useEffect para disparar la búsqueda cuando cambie el texto
   useEffect(() => {
     if (open) {
-      refresh(1, 10, debouncedSearch);
+      fetchUsers(1, 10, debouncedSearch);
     }
   }, [debouncedSearch, open]);
 

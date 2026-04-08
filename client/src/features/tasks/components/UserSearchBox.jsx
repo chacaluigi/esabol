@@ -10,11 +10,11 @@ export function UserSearchBox({ selectedUser, onSelectUser }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const debouncedSearch = useDebounce(searchTerm, 500);
-  const { users, refresh, loading } = useUsers();
+  const { users, fetchUsers, loading } = useUsers();
 
   useEffect(() => {
     if (debouncedSearch) {
-      refresh(1, 5, debouncedSearch);
+      fetchUsers(1, 5, debouncedSearch);
       setIsOpen(true);
     } else {
       setIsOpen(false);

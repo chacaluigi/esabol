@@ -55,7 +55,7 @@ const UsersPage = () => {
   const {
     users,
     loading,
-    refresh,
+    fetchUsers,
     addUser,
     updateUser,
     deleteUser,
@@ -73,7 +73,7 @@ const UsersPage = () => {
 
   //cada vez que la página en la URL se cambie se dispara la petición al API
   useEffect(() => {
-    refresh(currentPage, currentLimit, debouncedSearch);
+    fetchUsers(currentPage, currentLimit, debouncedSearch);
   }, [currentPage, currentLimit, debouncedSearch]);
 
   const handleSearch = (e) => {
@@ -103,9 +103,8 @@ const UsersPage = () => {
   };
 
   const handleResetAndRefresh = async () => {
-    //cuando se cambia la URL el useEffect detectará el cambio y ejecutará el refresh(1,10) automáticamente
     setSearchParams({ page: '1', limit: '10' });
-    await refresh();
+    await fetchUsers();
   };
   //hasta aca la PAGINACIÓN
 
@@ -142,7 +141,6 @@ const UsersPage = () => {
     }
 
     if (result?.success) {
-      //await refresh(currentPage, currentLimit);
       setModalConfig((prev) => ({ ...prev, open: false }));
       toast.success(
         modalConfig.mode === 'add'
