@@ -11,6 +11,7 @@ import {
 import DashboardPage from '@/pages/DashboardPage';
 import UsersPage from '@/pages/UsersPage';
 import TaskBoardPage from '@/pages/TaskBoardPage';
+import CalendarPage from '@/pages/CalendarPage';
 
 export const navConfig = {
   mainNav: [
@@ -31,6 +32,12 @@ export const navConfig = {
       href: '/tasks',
       icon: ClipboardList,
       component: TaskBoardPage,
+    },
+    {
+      title: 'Calendario',
+      href: '/calendar',
+      icon: ClipboardList,
+      component: CalendarPage,
     },
     {
       title: 'Location',
