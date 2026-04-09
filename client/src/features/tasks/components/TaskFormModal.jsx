@@ -53,7 +53,7 @@ export function TaskFormModal({
   //useEffect para disparar la búsqueda cuando cambie el texto
   useEffect(() => {
     if (open) {
-      fetchUsers(1, 10, debouncedSearch);
+      fetchUsers(1, 5, debouncedSearch);
     }
   }, [debouncedSearch, open]);
 
@@ -126,51 +126,6 @@ export function TaskFormModal({
               />
             </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="description">Descripción</Label>
-              <Textarea
-                id="description"
-                name="description"
-                defaultValue={task?.description}
-                placeholder="Detalles adicionales..."
-                className="resize-none"
-                rows={3}
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label>Prioridad</Label>
-                <Select
-                  name="priority"
-                  defaultValue={task?.priority || 'Media'}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Baja">Baja</SelectItem>
-                    <SelectItem value="Media">Media</SelectItem>
-                    <SelectItem value="Alta">Alta</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="grid gap-2">
-                <Label>Estado</Label>
-                <Select name="status" defaultValue={task?.status || 'TO_DO'}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="TO_DO">Por Hacer</SelectItem>
-                    <SelectItem value="DOING">En Progreso</SelectItem>
-                    <SelectItem value="DONE">Completadas</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
             {/* añadir usuarios a la tarea */}
             <div className="grid gap-2">
               <Label>Miembros Asignados</Label>
@@ -202,7 +157,12 @@ export function TaskFormModal({
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[450px] p-0" align="start">
+                <PopoverContent
+                  className="w-[450px] p-0"
+                  align="start"
+                  side="bottom"
+                  avoidCollisions={false}
+                >
                   <div className="p-2 border-b">
                     <Input
                       placeholder="Buscar usuario por nombre o correo..."
@@ -247,6 +207,51 @@ export function TaskFormModal({
                   </div>
                 </PopoverContent>
               </Popover>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label>Prioridad</Label>
+                <Select
+                  name="priority"
+                  defaultValue={task?.priority || 'Media'}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Baja">Baja</SelectItem>
+                    <SelectItem value="Media">Media</SelectItem>
+                    <SelectItem value="Alta">Alta</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="grid gap-2">
+                <Label>Estado</Label>
+                <Select name="status" defaultValue={task?.status || 'TO_DO'}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="TO_DO">Por Hacer</SelectItem>
+                    <SelectItem value="DOING">En Progreso</SelectItem>
+                    <SelectItem value="DONE">Completadas</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="description">Descripción</Label>
+              <Textarea
+                id="description"
+                name="description"
+                defaultValue={task?.description}
+                placeholder="Detalles adicionales..."
+                className="resize-none"
+                rows={3}
+              />
             </div>
 
             <div className="grid gap-2">
