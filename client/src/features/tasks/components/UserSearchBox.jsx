@@ -12,14 +12,20 @@ export function UserSearchBox({ selectedUser, onSelectUser }) {
   const debouncedSearch = useDebounce(searchTerm, 500);
   const { users, fetchUsers, loading } = useUsers();
 
+  //sincronizar el input si ya hay un usuario seleccionado al cargar
   useEffect(() => {
-    if (debouncedSearch) {
+    if (selectedUser) setSearchTerm(selectedUser.name);
+  }, [selectedUser]);
+
+  //solo busca cuando el texto es diferente al nombre del usuario ya seleccionado
+  useEffect(() => {
+    if (debouncedSearch && debouncedSearch !== selectedUser?.name) {
       fetchUsers(1, 5, debouncedSearch);
       setIsOpen(true);
     } else {
       setIsOpen(false);
     }
-  }, [debouncedSearch]);
+  }, [debouncedSearch, selectedUser]);
 
   const handleClear = () => {
     onSelectUser(null);
@@ -33,15 +39,15 @@ export function UserSearchBox({ selectedUser, onSelectUser }) {
         <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
         <Input
           placeholder="Buscar usuario por nombre o email..."
-          value={selectedUser ? selectedUser.name : searchTerm}
+          value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onFocus={() => searchTerm && setIsOpen(true)}
           className="pl-9 pr-9"
-          readOnly={!!selectedUser}
         />
-        {selectedUser && (
+        {searchTerm && (
           <button
             onClick={handleClear}
-            className="absolute right-2 top-2 p-1 rounded-full hover:bg-slate-100 text-slate-400"
+            className="absolute right-2 top-2 rounded-full hover:bg-slate-100 text-slate-400"
           >
             <X className="h-4 w-4" />
           </button>
@@ -49,8 +55,8 @@ export function UserSearchBox({ selectedUser, onSelectUser }) {
       </div>
 
       {/* dropdown de resultados */}
-      {isOpen && !selectedUser && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
+      {isOpen && (
+        <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-70 overflow-y-auto">
           {loading ? (
             <div className="p-3 text-sm text-slate-500 text-center">
               Buscando...
@@ -61,6 +67,7 @@ export function UserSearchBox({ selectedUser, onSelectUser }) {
                 key={user.id}
                 onClick={() => {
                   onSelectUser(user);
+                  setSearchTerm(user.name);
                   setIsOpen(false);
                 }}
                 className="flex items-center gap-3 p-2 hover:bg-slate-50 cursor-pointer border-b border-slate-50 last:border-0"
