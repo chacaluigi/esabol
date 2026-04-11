@@ -1,21 +1,8 @@
-SISTEMA PARA EL CONTROL DE TRABAJO DIARIO
+TaskFlow Manager: Sistema para el Control de Trabajo Diario
+TaskFlow Manager es un sistema integral diseñado específicamente para optimizar y administrar el control del trabajo diario. Su arquitectura está dividida de manera clara para asegurar un rendimiento eficiente, escalabilidad y una experiencia de usuario completamente fluida.
 
-TaskFlow Manager
+En cuanto a las tecnologías implementadas en la interfaz de usuario (Frontend), el proyecto está construido sobre React 18 utilizando Vite para garantizar tiempos de carga y construcción ultrarrápidos. Para el diseño visual y la estructura de la interfaz, se emplea Tailwind CSS en combinación con los componentes de alta calidad proporcionados por Shadcn UI. La gestión del estado global de la aplicación se maneja de forma ligera y eficiente mediante Zustand. Además, la iconografía del sistema está a cargo de Lucide React, y todas las peticiones y comunicaciones HTTP con el servidor se realizan a través de Axios.
 
-Tech Stack
+Por el lado de la lógica del servidor (Backend), el sistema funciona sobre un entorno robusto de Node.js utilizando el framework Express. Para garantizar una gestión segura y estructurada de la información, se implementa Sequelize ORM para el modelado de los datos. Esto permite una excelente persistencia y total compatibilidad con motores de bases de datos relacionales robustos, tales como PostgreSQL y MySQL.
 
-Frontend:
-React 18 (Vite)
-Tailwind CSS (Estilizado)
-Shadcn UI (Componentes de alta calidad)
-Zustand (Gestión de estado global ligera)
-Lucide React (Iconografía)
-Axios (Cliente HTTP)
-
-Backend:
-Node.js & Express
-Sequelize ORM (Modelado de datos)
-PostgreSQL / MySQL (Persistencia)
-Instalación y Configuración
-Prerrequisitos
-Node.js (v18+)
+Para proceder con la instalación y configuración del proyecto en un entorno de desarrollo local, es estrictamente necesario cumplir con los prerrequisitos del sistema. El requisito fundamental para inicializar la aplicación es contar con Node.js instalado en su versión 18 o superior.
