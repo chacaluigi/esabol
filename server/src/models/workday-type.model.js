@@ -11,6 +11,11 @@ const WorkdayType = sequelize.define('WorkdayType', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  color: {
+    type: DataTypes.STRING(7),
+    allowNull: true,
+    defaultValue: '#3b82f6'
+  }
 });
 
 export default WorkdayType;
