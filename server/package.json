@@ -10,7 +10,11 @@
     "migrate": "node --env-file .env ./node_modules/.bin/sequelize db:migrate",
     "migrate:undo": "node --env-file .env ./node_modules/.bin/sequelize db:migrate:undo",
     "migrate:status": "node --env-file .env ./node_modules/.bin/sequelize db:migrate:status",
-    "migration:generate": "npx sequelize-cli migration:generate --name"
+    "migration:generate": "npx sequelize-cli migration:generate --name",
+
+    "seed": "node --env-file .env ./node_modules/.bin/sequelize db:seed:all",
+    "seed:undo": "node --env-file .env ./node_modules/.bin/sequelize db:seed:undo",
+    "seed:generate": "npx sequelize-cli seed:generate --name"
   },
   "keywords": [],
   "author": "",
