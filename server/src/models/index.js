@@ -54,8 +54,14 @@ Task.hasMany(DailyReport, { foreignKey: 'taskId' });
 DailyReport.belongsTo(Task, { foreignKey: 'taskId' });
 
 //RELACIONES PARA DAILY REPORT
-DailyReport.hasMany(WorkdayType, { foreignKey: 'workdayTypeId' });
-WorkdayType.belongsTo(DailyReport, { foreignKey: 'workdayTypeId' });
+WorkdayType.hasMany(DailyReport, {
+  foreignKey: 'workdayTypeId',
+  as: 'dailyReports'
+});
+DailyReport.belongsTo(WorkdayType, {
+  foreignKey: 'workdayTypeId',
+  as: 'workdayType'
+});
 
 Team.hasMany(Task, { foreignKey: 'assigneeTeamId' });
 Task.belongsTo(Team, { foreignKey: 'assigneeTeamId' });
